@@ -39,6 +39,8 @@ jobs:
           key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-wheel-cache-
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
       - name: Run Formatter Check
         run: black --check .
 
@@ -54,6 +56,8 @@ jobs:
           key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-wheel-cache-
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
       - name: Run Linter
         run: ruff check .
 
@@ -69,6 +73,8 @@ jobs:
           key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-wheel-cache-
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
       - name: Run Type Check
         run: mypy .
 
@@ -84,6 +90,8 @@ jobs:
           key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-wheel-cache-
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
       - name: Run Security Check
         run: bandit -r .
 
@@ -99,6 +107,8 @@ jobs:
           key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-wheel-cache-
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
       - name: Run Complexity Check
         run: |
           echo "Cyclomatic Complexity:"
