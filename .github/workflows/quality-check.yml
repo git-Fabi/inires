@@ -32,6 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
       - name: Run Formatter Check
         run: black --check .
 
@@ -40,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
       - name: Run Linter
         run: ruff check .
 
@@ -48,6 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
       - name: Run Type Check
         run: mypy .
 
@@ -56,6 +62,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
       - name: Run Security Check
         run: bandit -r .
 
@@ -64,6 +72,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
       - name: Run Complexity Check
         run: |
           echo "Cyclomatic Complexity:"
