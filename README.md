@@ -1,2 +1,35 @@
-# inires
-An AI Agent to read tickets. Generate a number of suggestions, regarding best practices and how to solve the ticket and comment this in the ticket section.. 
+
+**inires** (short for *"initial response"*) is an AI-powered agent that analyzes support or development tickets and generates actionable suggestions. It helps teams by:
+
+- Interpreting ticket content
+- Suggesting solutions while maintaining best practices
+- directly creating a branch including the solution
+- providing the option to merge using pull requests
+
+---
+
+## Features
+
+-  Reads and understands ticket descriptions
+-  Generate solution using agents that maintain industry standards
+-  Create code solution on a new branch
+-  Automatically create a pull request
+
+---
+
+##  Use Case
+
+Example:
+> A user reports a timeout issue with a database call.  
+> inires reads the ticket
+> creates a branch and provides a solution in code
+> creates a pull request to review
+---
+
+## 🧰 Tech Stack
+
+- Python 3.10+
+- flock
+- Ticket system integration (GitHub Issues)
+
+---
