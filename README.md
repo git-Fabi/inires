@@ -26,10 +26,13 @@ Example:
 - Creates a pull request to review  
 ---
 
-## 🧰 Tech Stack
+## Tech Stack
 
 - Python 3.10+
 - flock
 - Ticket system integration (GitHub Issues)
+
+## Contributing
+See our [contributing guidelines](CONTRIBUTING.md) for more info.
 
 ---
