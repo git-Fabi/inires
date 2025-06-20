@@ -19,7 +19,7 @@ jobs:
       issue_body: ${{ steps.set_output.outputs.issue_body }}
     steps:
       - id: set_output
-      - name: Get Issue Content
+        name: Get Issue Content
         run: |
           echo "issue_title=$ISSUE_TITLE" >> $GITHUB_OUTPUT
           echo "issue_body=$ISSUE_BODY" >> $GITHUB_OUTPUT
