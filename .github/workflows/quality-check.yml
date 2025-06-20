@@ -46,7 +46,7 @@ jobs:
       - name: Run Formatter Check
         run: |
           source .venv/bin/activate
-          black --check .
+          black --check src/ tests/
 
   linting:
     needs: setup
@@ -63,7 +63,7 @@ jobs:
       - name: Run Linter
         run: |
           source .venv/bin/activate
-          ruff check .
+          ruff check src/ tests/
 
   type_check:
     needs: setup
@@ -80,7 +80,7 @@ jobs:
       - name: Run Type Check
         run: |
           source .venv/bin/activate
-          mypy .
+          mypy src/ tests/
 
   security_check:
     needs: setup
@@ -97,7 +97,7 @@ jobs:
       - name: Run Security Check
         run: |
           source .venv/bin/activate
-          bandit -r .
+          bandit -r src/ tests/
 
   complexity_check:
     needs: setup
@@ -115,6 +115,6 @@ jobs:
         run: |
           source .venv/bin/activate
           echo "Cyclomatic Complexity:"
-          radon cc . --total-average
+          radon cc src/ tests/ --total-average
           echo "Maintainability Index:"
-          radon mi .
+          radon mi src/ tests/
