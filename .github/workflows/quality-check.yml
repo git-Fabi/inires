@@ -32,13 +32,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Cache pip wheel cache
+      - name: Cache pip
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-wheel-cache-
+            ${{ runner.os }}-pip-
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
       - name: Run Formatter Check
@@ -49,13 +49,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Cache pip wheel cache
+      - name: Cache pip
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-wheel-cache-
+            ${{ runner.os }}-pip-
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
       - name: Run Linter
@@ -66,13 +66,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Cache pip wheel cache
+      - name: Cache pip
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-wheel-cache-
+            ${{ runner.os }}-pip-
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
       - name: Run Type Check
@@ -83,13 +83,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Cache pip wheel cache
+      - name: Cache pip
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-wheel-cache-
+            ${{ runner.os }}-pip-
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
       - name: Run Security Check
@@ -100,13 +100,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Cache pip wheel cache
+      - name: Cache pip
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-wheel-cache-
+            ${{ runner.os }}-pip-
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
       - name: Run Complexity Check
