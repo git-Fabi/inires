@@ -16,16 +16,20 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: 3.11
-      - name: Cache pip
+      - name: Cache virtualenv
         id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: pip install -r requirements-dev.txt
+            ${{ runner.os }}-venv-
+      - name: Setup virtualenv and install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements-dev.txt
 
   formatting:
     needs: setup
@@ -35,14 +39,14 @@ jobs:
       - name: Cache pip
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: pip install -r requirements-dev.txt
+            ${{ runner.os }}-venv-
       - name: Run Formatter Check
-        run: black --check .
+        run: |
+          source .venv/bin/activate
+          black --check .
 
   linting:
     needs: setup
@@ -52,14 +56,14 @@ jobs:
       - name: Cache pip
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: pip install -r requirements-dev.txt
+            ${{ runner.os }}-venv-
       - name: Run Linter
-        run: ruff check .
+        run: |
+          source .venv/bin/activate
+          ruff check .
 
   type_check:
     needs: setup
@@ -69,14 +73,14 @@ jobs:
       - name: Cache pip
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: pip install -r requirements-dev.txt
+            ${{ runner.os }}-venv-
       - name: Run Type Check
-        run: mypy .
+        run: |
+          source .venv/bin/activate
+          mypy .
 
   security_check:
     needs: setup
@@ -86,14 +90,14 @@ jobs:
       - name: Cache pip
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: pip install -r requirements-dev.txt
+            ${{ runner.os }}-venv-
       - name: Run Security Check
-        run: bandit -r .
+        run: |
+          source .venv/bin/activate
+          bandit -r .
 
   complexity_check:
     needs: setup
@@ -103,14 +107,13 @@ jobs:
       - name: Cache pip
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-wheel-cache-${{ hashFiles('requirements-dev.txt') }}
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('requirements-dev.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: pip install -r requirements-dev.txt
+            ${{ runner.os }}-venv-
       - name: Run Complexity Check
         run: |
+          source .venv/bin/activate
           echo "Cyclomatic Complexity:"
           radon cc . --total-average
           echo "Maintainability Index:"
