@@ -1,0 +1,23 @@
+name: test
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  read_ticket:
+    runs-on: ubuntu-latest
+    outputs:
+      issue_title: ${{ steps.set_output.outputs.issue_title }}
+      issue_body: ${{ steps.set_output.outputs.issue_body }}
+    steps:
+      - name: Get Issue Content
+        run: |
+          echo "${{ github.event.issue.title }}" > issue_title.txt
+          echo "${{ github.event.issue.body }}" > issue_body.txt
+      - name: Upload Issue Content
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-data
+          path: |
+            issue_title.txt
+            issue_body.txt
