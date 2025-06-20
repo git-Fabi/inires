@@ -120,6 +120,19 @@ Test Guidelines
 
     If your feature is difficult to test, explain why in the PR.
 
+## Using Pre-commit Hooks
+
+We use [pre-commit](https://pre-commit.com/) hooks to keep the codebase clean, consistent, and secure. Before every commit, the configured hooks will automatically check your code for formatting, linting, typing, security issues, and complexity.
+
+### How to install pre-commit hooks
+
+Run this command once after cloning the repo:
+
+```bash
+pre-commit install
+```
+
+
 ## Pull Request Workflow
 
 1. **Create a PR** against the `main` branch.
