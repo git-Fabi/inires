@@ -10,6 +10,7 @@ dependencies = [
     "flock>=0.1",
     "flock-core>=0.4.524",
     "mypy>=1.16.1",
+    "pre-commit>=4.2.0",
     "pytest>=8.4.1",
     "radon>=6.0.1",
     "ruff>=0.12.0",

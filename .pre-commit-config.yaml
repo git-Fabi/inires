@@ -1,0 +1,38 @@
+repos:
+  - repo: git@github.com:psf/black
+    rev: 23.7.0  # pin to a stable version
+    hooks:
+      - id: black
+        args: ["--check", "src/", "tests/"]
+
+  - repo: git@github.com:charliermarsh/ruff-pre-commit
+    rev: v0.0.260  # pin version
+    hooks:
+      - id: ruff
+        args: ["check", "src/", "tests/"]
+
+  - repo: git@github.com:pre-commit/mirrors-mypy
+    rev: v1.3.0
+    hooks:
+      - id: mypy
+        args: ["--strict", "src/", "tests/"]
+
+  - repo: git@github.com:PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        args: ["-r", "src/", "tests/"]
+
+  - repo: local
+    hooks:
+      - id: radon-cc
+        name: Radon Cyclomatic Complexity
+        entry: radon cc --total-average src/ tests/
+        language: system
+        types: [ python ]
+
+      - id: radon-mi
+        name: Radon Maintainability Index
+        entry: radon mi src/ tests/
+        language: system
+        types: [ python ]
