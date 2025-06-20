@@ -1,4 +1,4 @@
-# 🐍 Python Project Quality Assurance Setup
+# Contribution guidelines
 
 This project enforces code quality and security using:
 
@@ -10,7 +10,7 @@ This project enforces code quality and security using:
 
 ---
 
-## 🧰 Installation
+## Installation
 
 Create and activate your virtual environment, then install the dependencies:
 
@@ -23,7 +23,7 @@ pip install black ruff bandit radon
 
 ---
 
-## ✅ Code Quality Checks
+## Code Quality Checks
 
 Run the following tools before committing code:
 
@@ -59,7 +59,7 @@ radon cc . -s -a
 
 ---
 
-## 🌿 Git Branching Strategy
+## Git Branching Strategy
 
 | Prefix      | Purpose                                       | Example Branch Name           |
 | ----------- | --------------------------------------------- | ----------------------------- |
@@ -88,7 +88,7 @@ git checkout -b feature/<short-feature-name>
 
 ---
 
-## 🔀 Pull Request Workflow
+## Pull Request Workflow
 
 1. **Create a PR** against the `main` branch.
 2. Ensure:
