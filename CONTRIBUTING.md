@@ -18,10 +18,38 @@ Create and activate your virtual environment, then install the dependencies:
 python -m venv venv
 source venv/bin/activate  # or venv\Scripts\activate on Windows
 
-pip install black ruff bandit radon
+pip install -r requirements-dev.txt
 ````
 
 ---
+
+## Git Branching Strategy
+
+| Prefix      | Purpose                                       | Example Branch Name           |
+| ----------- | --------------------------------------------- | ----------------------------- |
+| `feat/`     | New feature or enhancement                    | `feat/1234-user-login`        |
+| `fix/`      | Bug fix                                       | `fix/5678-null-pointer-crash` |
+| `bugfix/`   | Alternative to `fix/`, more explicit          | `bugfix/7890-ui-freeze`       |
+| `hotfix/`   | Critical fix, often for production            | `hotfix/urgent-prod-issue`    |
+| `chore/`    | Routine tasks, cleanup, no logic change       | `chore/cleanup-unused-files`  |
+| `refactor/` | Code restructuring without behavior change    | `refactor/auth-service`       |
+| `docs/`     | Documentation updates                         | `docs/api-endpoint-specs`     |
+| `test/`     | Adding or updating tests                      | `test/improve-coverage-login` |
+| `ci/`       | CI/CD configuration or pipeline changes       | `ci/cache-optimization`       |
+| `build/`    | Build system or tooling changes               | `build/update-webpack-config` |
+| `infra/`    | Infrastructure as code (e.g., IaC, pipelines) | `infra/terraform-setup`       |
+| `revert/`   | Reverting a previous commit or branch         | `revert/feat-login-refactor`  |
+| `devops/`   | DevOps tooling, deployment setup              | `devops/enable-auto-scaling`  |  
+
+
+
+### Creating a Feature Branch
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b feat/<issue-number>-<short-description>
+```
 
 ## Code Quality Checks
 
@@ -59,34 +87,38 @@ radon cc . -s -a
 
 ---
 
-## Git Branching Strategy
+## Testing
 
-| Prefix      | Purpose                                       | Example Branch Name           |
-| ----------- | --------------------------------------------- | ----------------------------- |
-| `feat/`     | New feature or enhancement                    | `feat/1234-user-login`        |
-| `fix/`      | Bug fix                                       | `fix/5678-null-pointer-crash` |
-| `bugfix/`   | Alternative to `fix/`, more explicit          | `bugfix/7890-ui-freeze`       |
-| `hotfix/`   | Critical fix, often for production            | `hotfix/urgent-prod-issue`    |
-| `chore/`    | Routine tasks, cleanup, no logic change       | `chore/cleanup-unused-files`  |
-| `refactor/` | Code restructuring without behavior change    | `refactor/auth-service`       |
-| `docs/`     | Documentation updates                         | `docs/api-endpoint-specs`     |
-| `test/`     | Adding or updating tests                      | `test/improve-coverage-login` |
-| `ci/`       | CI/CD configuration or pipeline changes       | `ci/cache-optimization`       |
-| `build/`    | Build system or tooling changes               | `build/update-webpack-config` |
-| `infra/`    | Infrastructure as code (e.g., IaC, pipelines) | `infra/terraform-setup`       |
-| `revert/`   | Reverting a previous commit or branch         | `revert/feat-login-refactor`  |
-| `devops/`   | DevOps tooling, deployment setup              | `devops/enable-auto-scaling`  |  
+We use pytest for unit and integration testing.
+Running Tests
 
+From the project root:
 
+pytest tests/
 
-### Creating a Feature Branch
+To run with coverage:
 
-```bash
-git checkout main
-git checkout -b feature/<short-feature-name>
-```
+pytest --cov=inires tests/
 
----
+Writing Tests
+
+    Add tests in the tests/ directory.
+
+    Name your test files like test_<module>.py.
+
+    Use descriptive test function names (e.g. test_agent_returns_multiple_suggestions()).
+
+    Use fixtures and mocking where appropriate.
+
+Test Guidelines
+
+    Write tests for new features and bug fixes.
+
+    Aim for at least 80% coverage.
+
+    Include both happy path and edge cases.
+
+    If your feature is difficult to test, explain why in the PR.
 
 ## Pull Request Workflow
 
