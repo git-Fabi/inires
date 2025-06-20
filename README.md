@@ -1,4 +1,4 @@
-
+## Inires
 **inires** (short for *"initial response"*) is an AI-powered agent that analyzes support or development tickets and generates actionable suggestions. It helps teams by:
 
 - Interpreting ticket content
@@ -20,10 +20,10 @@
 ##  Use Case
 
 Example:
-> A user reports a timeout issue with a database call.  
-> inires reads the ticket
-> creates a branch and provides a solution in code
-> creates a pull request to review
+- A user reports a timeout issue with a database call.  
+- Inires reads the ticket  
+- Creates a branch and provides a solution in code  
+- Creates a pull request to review  
 ---
 
 ## 🧰 Tech Stack
