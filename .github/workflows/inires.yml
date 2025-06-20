@@ -1,30 +1,52 @@
-name: inires
+name: FLOCK AI Ticket Resolver
 
+# Grant the necessary permissions for the GITHUB_TOKEN used by the job.
+# This is required for creating branches, committing code, and posting comments.
 permissions:
-  issues: read
+  issues: write
+  contents: write
+  pull-requests: write
 
+# This workflow is triggered whenever a new issue is opened.
 on:
   issues:
     types: [opened]
 
 jobs:
-  read_ticket:
+  resolve-ticket:
+    name: Resolve Ticket with FLOCK AI
     runs-on: ubuntu-latest
-    outputs:
-      issue_title: ${{ steps.set_output.outputs.issue_title }}
-      issue_body: ${{ steps.set_output.outputs.issue_body }}
     steps:
-      - id: set_output
-        name: Get Issue Content
+      # Step 1: Check out the repository's code onto the runner's filesystem.
+      # This makes the codebase accessible to our Python script.
+      - name: 1. Check out repository code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up the Python environment for the job.
+      - name: 2. Set up Python Environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # Step 3: Install all project dependencies from the requirements file.
+      - name: 3. Install Project Dependencies
+        run: pip install -r requirements.txt
+
+      # Step 4: Run the main agent system script.
+      # We pass necessary data and secrets as environment variables.
+      - name: 4. Run FLOCK Agent System
         env:
+          # Data from the triggering event (the issue) is passed to the script.
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
-        run: |
-          title_b64=$(printf '%s' "$ISSUE_TITLE" | base64)
-          body_b64=$(printf '%s' "$ISSUE_BODY" | base64)
-          
-          echo "issue_title_b64=$title_b64" >> $GITHUB_OUTPUT
-          echo "issue_body_b64=$body_b64" >> $GITHUB_OUTPUT
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
 
+          # The GITHUB_TOKEN is a temporary, auto-generated secret for authenticating API calls.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+          # IMPORTANT: You must create 'OPENAI_API_KEY' in your repository secrets.
+          # Go to: Settings > Secrets and variables > Actions > New repository secret.
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
+        # This command executes the main script, starting the agent workflow.
+        run: python main_flock_script.py
