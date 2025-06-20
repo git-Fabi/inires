@@ -12,14 +12,41 @@ This project enforces code quality and security using:
 
 ## Installation
 
-Create and activate your virtual environment, then install the dependencies:
+First, install [`uv`](https://github.com/astral-sh/uv), a fast Python package manager and virtual environment tool.
+
+You can install it using **`curl`**:
 
 ```bash
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+curl -Ls https://astral.sh/uv/install.sh | sh
+```
+Or using pip (requires Python ≥3.8):
+```bash
+pip install uv
+```
+- If installed via curl, uv will be located at ~/.cargo/bin/uv. Make sure that directory is in your $PATH.
+- If installed via pip, the uv command will be available in your Python environment’s bin directory.
 
-pip install -r requirements-dev.txt
-````
+### Set up your environment and install dependencies
+
+```bash
+# Create and activate a virtual environment using uv
+uv venv venv
+source venv/bin/activate
+```
+
+Option 1: Using pyproject.toml (recommended)
+
+```bash
+# Install all dependencies defined in pyproject.toml
+uv pip install -e .[dev]
+```
+
+Option 2: Using requirements-dev.txt
+
+```bash
+# Install dependencies from requirements-dev.txt using uv
+uv pip install -r requirements-dev.txt
+```
 
 ---
 
