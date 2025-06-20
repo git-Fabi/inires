@@ -17,9 +17,11 @@ jobs:
       - id: set_output
         name: Get Issue Content
         run: |
-          echo "issue_title<<EOF" >> $GITHUB_OUTPUT
-          echo "issue_title=${{ github.event.issue.title }}" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          echo "issue_body<<EOF" >> $GITHUB_OUTPUT
-          echo "${{ github.event.issue.body }}" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          title_b64=$(printf '%s' "${{ github.event.issue.title }}" | base64)
+          body_b64=$(printf '%s' "${{ github.event.issue.body }}" | base64)
+          
+          echo "issue_title_b64=$title_b64" >> $GITHUB_OUTPUT
+          echo "issue_body_b64=$body_b64" >> $GITHUB_OUTPUT
+
+
+
