@@ -1,0 +1,30 @@
+name: inires
+
+permissions:
+  issues: read
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  read_ticket:
+    runs-on: ubuntu-latest
+    outputs:
+      issue_title: ${{ steps.set_output.outputs.issue_title }}
+      issue_body: ${{ steps.set_output.outputs.issue_body }}
+    steps:
+      - id: set_output
+        name: Get Issue Content
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          title_b64=$(printf '%s' "$ISSUE_TITLE" | base64)
+          body_b64=$(printf '%s' "$ISSUE_BODY" | base64)
+          
+          echo "issue_title_b64=$title_b64" >> $GITHUB_OUTPUT
+          echo "issue_body_b64=$body_b64" >> $GITHUB_OUTPUT
+
+
+
