@@ -1,8 +1,9 @@
 from models.ticket import Ticket
 from utils.utils_agents import setup_agents, runner
+from typing import Any
 
 
-def main(ticket: Ticket, repository: str = None) -> str:
+def main(ticket: Ticket, repository: str = "") -> Any:
     """
     This is the main execution function.
     It sets up the application, creates test data, and runs the agent pipeline.

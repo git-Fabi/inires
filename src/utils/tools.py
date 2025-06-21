@@ -1,6 +1,5 @@
 import logging
 import os
-
 from flock.core import flock_tool
 
 LOGGER = logging.getLogger(__name__)
