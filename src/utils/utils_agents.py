@@ -17,6 +17,7 @@ from src.utils.utils_solution_generator_agent import setup_solution_generator_ag
 
 MODEL = "azure/gpt-4o-mini"
 
+
 def setup_agents() -> Flock:
     """Sets up the Flock instance with all agents and tools."""
     flock: Flock = Flock(model=MODEL, name="inires_flock")

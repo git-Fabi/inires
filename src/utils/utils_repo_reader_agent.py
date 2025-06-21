@@ -41,7 +41,9 @@ def _scan_repository_filesystem(root_dir: str = ".") -> list[str]:
         for file in files:
             file_path = os.path.join(root, file)
             if os.path.isfile(file_path):
-                file_list.append(os.path.relpath(file_path, root_dir).replace("\\", "/"))
+                file_list.append(
+                    os.path.relpath(file_path, root_dir).replace("\\", "/")
+                )
     logging.info(f"Found {len(file_list)} files in the repository.")
     return file_list
 

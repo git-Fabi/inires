@@ -1,6 +1,4 @@
 from typing import Any, Generator
-
-import pytest
 from unittest.mock import MagicMock, patch, AsyncMock
 
 import pytest
