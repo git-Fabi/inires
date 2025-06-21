@@ -35,7 +35,7 @@ class SolutionGeneratorAgent:
             # The input will now be the output from the RepoReader agent.
             input="relevant_files_context: str | This is a JSON object from the previous agent containing a list of relevant file paths.",
             output="solution_plan: str | A JSON object with a 'plan' key containing a list of steps and the full file paths for the solution for existing relevant files or destinations for new files.",
-            temperature=0.6,
+            temperature=0.7,
             max_tokens=16384,
             max_tool_calls=1000,
             tools=[read_repository_files],
