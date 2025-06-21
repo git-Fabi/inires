@@ -44,7 +44,7 @@ def test_runner(mock_flock_run, mock_ticket):
     mock_flock.run = mock_flock_run
     mock_flock_run.return_value = {"context": "something useful"}
 
-    result = runner(mock_flock, mock_ticket)
+    result = runner(mock_flock, mock_ticket, repository_input={"repo_name": "test_repo"})
 
     mock_flock_run.assert_called_once_with(
         "ticket_reader_agent", input=mock_ticket.to_dict()
