@@ -120,3 +120,20 @@ jobs:
           radon cc src/ tests/ --total-average
           echo "Maintainability Index:"
           radon mi src/ tests/
+
+  testing:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-venv-
+      - name: Run Pytest
+        run: |
+          source .venv/bin/activate
+          pytest --maxfail=3 --disable-warnings -q
