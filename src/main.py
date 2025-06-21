@@ -1,7 +1,8 @@
 from models.ticket import Ticket
 from utils.utils_agents import setup_agents, runner
 
-def main(ticket: Ticket, repository: str=None) -> str:
+
+def main(ticket: Ticket, repository: str = None) -> str:
     """
     This is the main execution function.
     It sets up the application, creates test data, and runs the agent pipeline.
@@ -12,9 +13,6 @@ def main(ticket: Ticket, repository: str=None) -> str:
     print("--- Kicking off Agent Pipeline ---")
     result = runner(inires_flock, ticket=ticket, repository_input=repository)
     return result
-
-
-
 
 
 if __name__ == "__main__":
