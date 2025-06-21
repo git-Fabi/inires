@@ -24,8 +24,8 @@ class WriterAgent:
             "be modified or created. The plan is a JSON string that "
             "provides a step-by-step guide.",
             output="commit_message: str | A JSON object with a message that "
-                   "describes the changes made in the code. where they were "
-                   "made and why.",
+            "describes the changes made in the code. where they were "
+            "made and why.",
             tools=[write_code_to_file],
             temperature=1.0,
             max_tokens=16384,

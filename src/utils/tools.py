@@ -36,7 +36,7 @@ def read_repository_files(file_paths: List[str]) -> str:
     return "\n\n".join(all_contents)
 
 
-@flock_tool # type: ignore
+@flock_tool  # type: ignore
 def write_code_to_file(file_path: str, code: str) -> None:
     try:
         # Ensure the directory exists
