@@ -28,7 +28,7 @@ Example:
 
 ## Tech Stack
 
-- Python 3.10+
+- Python 3.11+
 - flock
 - Ticket system integration (GitHub Issues)
 
