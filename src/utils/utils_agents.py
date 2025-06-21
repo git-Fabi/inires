@@ -1,8 +1,7 @@
 import json
-from typing import Any, Optional
+from typing import Any
 
 from flock.core import Flock
-from typing import Any
 from models.ticket import Ticket
 from src.utils.utils_reader_agent import setup_reader_agent
 from src.utils.utils_repo_reader_agent import (
