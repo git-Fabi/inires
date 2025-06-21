@@ -101,7 +101,7 @@ celerybeat.pid
 .env
 .venv
 env/
-venv/
+.venv/
 ENV/
 env.bak/
 venv.bak/
@@ -148,3 +148,5 @@ cython_debug/
 
 # Windows thumbnail cache files
 Thumbs.db
+
+.flock
