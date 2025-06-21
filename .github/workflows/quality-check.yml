@@ -97,6 +97,8 @@ jobs:
       - name: Run Security Check
         run: |
           source .venv/bin/activate
+          # The B101 test (assert usage) is skipped because assert statements are allowed in test code
+          # and are not used in production code. This exclusion is intentional and does not compromise security.
           bandit -r src/ tests/ --skip B101
 
   complexity_check:
