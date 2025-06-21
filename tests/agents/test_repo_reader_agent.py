@@ -15,7 +15,7 @@ def test_repo_reader_agent_initialization() -> None:
     assert agent.agent is None
 
 
-def test_create_repo_reader_agent(monkeypatch: MagicMock) -> None:
+def test_create_repo_reader_agent(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test that create_repo_reader_agent calls FlockFactory with correct parameters."""
     agent = RepoReaderAgent(name="test_agent")
     dummy_instance = DummyFlockAgent()
