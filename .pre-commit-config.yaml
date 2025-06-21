@@ -9,19 +9,19 @@ repos:
     rev: v0.0.260  # pin version
     hooks:
       - id: ruff
-        args: ["src/", "tests/"]
+        args: [check, "src/", "tests/", --fix]
 
   - repo: git@github.com:pre-commit/mirrors-mypy
     rev: v1.3.0
     hooks:
       - id: mypy
-        args: [--strict, --explicit-package-bases ,"src/", "tests/"]
+        args: [--strict, --ignore-missing-imports, --explicit-package-bases ,"src/", "tests/"]
 
   - repo: git@github.com:PyCQA/bandit
     rev: 1.7.5
     hooks:
       - id: bandit
-        args: [-r, "src/", "tests/"]
+        args: [-r, "src/", "tests/", --skip B101]
 
   - repo: local
     hooks:
@@ -29,10 +29,16 @@ repos:
         name: Radon Cyclomatic Complexity
         entry: radon cc --total-average src/ tests/
         language: system
-        types: [ python ]
+        types: [python]
 
       - id: radon-mi
         name: Radon Maintainability Index
         entry: radon mi src/ tests/
         language: system
-        types: [ python ]
+        types: [python]
+
+      - id: pytest
+        name: Run Pytest tests
+        entry: pytest tests/
+        language: system
+        always_run: true

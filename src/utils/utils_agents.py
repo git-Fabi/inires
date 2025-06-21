@@ -1,4 +1,5 @@
 import json
+import logging
 
 from flock.core import Flock
 
@@ -15,7 +16,6 @@ from src.utils.utils_solution_generator_agent import setup_solution_generator_ag
 # This import now points to the new, dedicated tools file
 
 MODEL = "azure/gpt-4o-mini"
-
 
 def setup_agents() -> Flock:
     """Sets up the Flock instance with all agents and tools."""
@@ -40,13 +40,13 @@ def runner(flock: Flock, ticket: Ticket, repository_input: str = None) -> str:
     Returns:
         The final solution plan as a string.
     """
-    print("--- STARTING AGENT PIPELINE ---")
+    logging.info("--- STARTING AGENT PIPELINE ---")
 
     # --- Stage 1: Run TicketReaderAgent ---
-    print("\n[1/3] Running TicketReaderAgent...")
+    logging.info("[1/3] Running TicketReaderAgent...")
     # Assuming the name of the reader agent is 'ticket_reader_agent'
     ticket_context_json = flock.run("ticket_reader_agent", input=ticket.to_dict())
-    print(f"   -> Output: {ticket_context_json}")
+    logging.debug(f"   -> Output: {ticket_context_json}")
     if isinstance(ticket_context_json, str):
         ticket_description = json.loads(ticket_context_json).get(
             "description", ticket.title

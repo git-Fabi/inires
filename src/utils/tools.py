@@ -7,7 +7,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 @flock_tool
-async def read_repository_files(file_paths: list[str]) -> str:
+def read_repository_files(file_paths: list[str]) -> str:
     """
     Reads the content of one or more files from the local repository filesystem.
     This tool is essential for fetching the context needed to analyze a problem.
