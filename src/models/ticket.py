@@ -4,7 +4,7 @@ class Ticket:
         self.body: str = ticket_body
         self.number: str = ticket_number
 
-    def __dict__(self) -> dict:
+    def to_dict(self) -> dict:
         return {
             "ticket_title": self.title,
             "ticket_body": self.body,

@@ -1,7 +1,7 @@
 from flock.core import FlockFactory, FlockAgent
 
-from models.Ticket import Ticket
-from models.TicketContext import TicketContext
+from models.ticket import Ticket
+from models.ticket_context import TicketContext
 
 
 class IssueReaderAgent:
@@ -11,7 +11,6 @@ class IssueReaderAgent:
 
     def __init__(self, name: str) -> None:
         self.name = name
-        self.agent = None
         self.description = (
             "You are a reader agent that reads and processes "
             "tickets. Your task is to read the ticket and "
@@ -21,7 +20,7 @@ class IssueReaderAgent:
         )
 
     def create_issue_reader_agent(self) -> FlockAgent:
-        self.agent = FlockFactory.create_default_agent(
+        return FlockFactory.create_default_agent(
             name=self.name,
             description=self.description,
             input=Ticket.get_representation_for_agent(),
@@ -29,4 +28,3 @@ class IssueReaderAgent:
             temperature=1.0,
             max_tokens=16384,
         )
-        return self.agent

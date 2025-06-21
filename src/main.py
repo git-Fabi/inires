@@ -1,4 +1,4 @@
-from models.Ticket import Ticket
+from models.ticket import Ticket
 from utils.utils_agents import runner, setup_agents
 
 

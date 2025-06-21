@@ -1,4 +1,4 @@
-from models.Ticket import Ticket
+from models.ticket import Ticket
 from flock.core import Flock
 
 from utils.utils_reader_agent import setup_reader_agent
@@ -15,6 +15,6 @@ def setup_agents() -> Flock:
 
 
 def runner(flock: Flock, ticket: Ticket) -> str:
-    processed_ticket = flock.run("ticket_reader_agent", input=ticket.__dict__())
+    processed_ticket = flock.run("ticket_reader_agent", input=ticket.to_dict())
     print(processed_ticket)
     return "ticket solution"
