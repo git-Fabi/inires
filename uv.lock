@@ -926,6 +926,8 @@ source = { virtual = "." }
 dependencies = [
     { name = "flock" },
     { name = "flock-core" },
+    { name = "pre-commit" },
+    { name = "pytest" },
 ]
 
 [package.optional-dependencies]
@@ -946,7 +948,9 @@ requires-dist = [
     { name = "flock", specifier = ">=0.1" },
     { name = "flock-core", specifier = ">=0.4.524" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.16.1" },
+    { name = "pre-commit", specifier = ">=4.2.0" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.2.0" },
+    { name = "pytest", specifier = ">=8.4.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.4.1" },
     { name = "radon", marker = "extra == 'dev'", specifier = ">=6.0.1" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.12.0" },
@@ -2672,14 +2676,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/28/3f/13cacea96900bbd31bb05c6b74135f85d15564fc583802be56976c940470/stevedore-5.4.1.tar.gz", hash = "sha256:3135b5ae50fe12816ef291baff420acb727fcd356106e3e9cbfa9e5985cd6f4b", size = 513858, upload-time = "2025-02-20T14:03:57.285Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f7/45/8c4ebc0c460e6ec38e62ab245ad3c7fc10b210116cea7c16d61602aa9558/stevedore-5.4.1-py3-none-any.whl", hash = "sha256:d10a31c7b86cba16c1f6e8d15416955fc797052351a56af15e608ad20811fcfe", size = 49533, upload-time = "2025-02-20T14:03:55.849Z" },
-]
-
-[[package]]
-name = "stubs"
-version = "1.0.0"
-source = { registry = "https://pypi.org/simple" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/dc/06/34d1970fd8872a406746ccc168ac4034b864450af72022d540aef8bf1f7a/stubs-1.0.0-py3-none-any.whl", hash = "sha256:f328a0f99880b0684db69288dcb104fa93d942df298ddd1659edaa7521415da8", size = 8499, upload-time = "2016-10-31T22:15:37.884Z" },
 ]
 
 [[package]]

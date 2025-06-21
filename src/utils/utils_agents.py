@@ -1,4 +1,5 @@
 import json
+from typing import Any, Optional
 
 from flock.core import Flock
 from typing import Any
@@ -31,10 +32,12 @@ def setup_agents() -> Flock:
     return flock
 
 
+
 def runner(flock: Flock, ticket: Ticket, repository_input: str = "") -> Any:
     print("--- STARTING AGENT PIPELINE ---")
 
     print("\n[1/4] Running TicketReaderAgent...")
+
     ticket_context_json = flock.run("ticket_reader_agent", input=ticket.to_dict())
     print(f"   -> Output: {ticket_context_json}")
     if isinstance(ticket_context_json, str):
@@ -47,7 +50,7 @@ def runner(flock: Flock, ticket: Ticket, repository_input: str = "") -> Any:
     print("\n[2/4] Running RepoReaderAgent...")
     repo_reader_input_str = (
         repository_input
-        if repository_input
+        if repository_input is not None
         else prepare_repo_reader_input(ticket_description)
     )
     repo_reader_output_json = flock.run(

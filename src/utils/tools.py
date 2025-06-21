@@ -1,12 +1,13 @@
 import logging
 import os
+from typing import List
 from flock.core import flock_tool
 
 LOGGER = logging.getLogger(__name__)
 
 
-@flock_tool
-async def read_repository_files(file_paths: list[str]) -> str:
+@flock_tool  # type: ignore
+def read_repository_files(file_paths: List[str]) -> str:
     """
     Reads the content of one or more files from the local repository filesystem.
     This tool is essential for fetching the context needed to analyze a problem.

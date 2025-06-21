@@ -1,3 +1,4 @@
+from typing import Generator, Tuple
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -6,7 +7,7 @@ from agents.reader_agent import IssueReaderAgent
 
 
 @pytest.fixture
-def mock_ticket_and_context():
+def mock_ticket_and_context() -> Generator[Tuple[MagicMock, MagicMock], None, None]:
     with (
         patch("models.ticket.Ticket.get_representation_for_agent") as mock_ticket_repr,
         patch(
@@ -19,19 +20,22 @@ def mock_ticket_and_context():
 
 
 @pytest.fixture
-def mock_flock_factory():
+def mock_flock_factory() -> Generator[Tuple[MagicMock, MagicMock], None, None]:
     with patch("flock.core.FlockFactory.create_default_agent") as mock_factory:
         mock_agent = MagicMock(name="FlockAgent")
         mock_factory.return_value = mock_agent
         yield mock_factory, mock_agent
 
 
-def test_issue_reader_agent_initialization():
+def test_issue_reader_agent_initialization() -> None:
     agent = IssueReaderAgent("Reader1")
     assert agent.name == "Reader1"
 
 
-def test_create_issue_reader_agent(mock_ticket_and_context, mock_flock_factory):
+def test_create_issue_reader_agent(
+    mock_ticket_and_context: Tuple[MagicMock, MagicMock],
+    mock_flock_factory: Tuple[MagicMock, MagicMock],
+) -> None:
     mock_ticket_repr, mock_context_repr = mock_ticket_and_context
     mock_factory, mock_agent = mock_flock_factory
 

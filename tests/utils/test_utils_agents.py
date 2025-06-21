@@ -7,7 +7,7 @@ from utils.utils_agents import setup_agents, runner
 
 
 @pytest.fixture
-def mock_ticket():
+def mock_ticket() -> MagicMock:
     ticket = MagicMock(spec=Ticket)
     ticket.to_dict.return_value = {
         "ticket_title": "Fix logout issue",
@@ -68,7 +68,7 @@ def test_setup_agents(
 
 
 @patch("utils.utils_agents.Flock.run")
-def test_runner(mock_flock_run, mock_ticket) -> None:
+def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
     mock_flock = MagicMock()
     mock_flock.run = mock_flock_run
     mock_ticket.title = "Mock Ticket Title"
