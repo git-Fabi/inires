@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 
 from src.agents.repo_reader_agent import RepoReaderAgent
 from flock.core import FlockAgent
@@ -35,7 +36,7 @@ def _scan_repository_filesystem(root_dir: str = ".") -> list[str]:
         "dist",
     }
 
-    print(f"Scanning repository from '{os.path.abspath(root_dir)}'...")
+    logging.info(f"Scanning repository from '{os.path.abspath(root_dir)}'...")
 
     for root, dirs, files in os.walk(root_dir):
         # This line efficiently prunes the directories to prevent `os.walk` from traversing them.
@@ -45,7 +46,7 @@ def _scan_repository_filesystem(root_dir: str = ".") -> list[str]:
             file_path = os.path.join(root, file)
             file_list.append(os.path.relpath(file_path, root_dir).replace("\\", "/"))
 
-    print(f"Found {len(file_list)} files in the repository.")
+    logging.info(f"Found {len(file_list)} files in the repository.")
     return file_list
 
 
