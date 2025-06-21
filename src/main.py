@@ -2,7 +2,6 @@ from typing import Optional, Any
 
 from models.ticket import Ticket
 from utils.utils_agents import setup_agents, runner
-from typing import Any
 
 def main(ticket: Ticket, repository: Optional[str] = None) -> Any:
     """
