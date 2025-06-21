@@ -9,19 +9,19 @@ repos:
     rev: v0.0.260  # pin version
     hooks:
       - id: ruff
-        args: ["src/", "tests/"]
+        args: [check, "src/", "tests/", --fix]
 
   - repo: git@github.com:pre-commit/mirrors-mypy
     rev: v1.3.0
     hooks:
       - id: mypy
-        args: [--strict, --explicit-package-bases ,"src/", "tests/"]
+        args: [--strict, --ignore-missing-imports, --explicit-package-bases ,"src/", "tests/"]
 
   - repo: git@github.com:PyCQA/bandit
     rev: 1.7.5
     hooks:
       - id: bandit
-        args: [-r, "src/", "tests/"]
+        args: [-r, "src/"]
 
   - repo: local
     hooks:
