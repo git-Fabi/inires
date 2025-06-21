@@ -25,7 +25,15 @@ def _scan_repository_filesystem(root_dir: str = ".") -> list[str]:
     """
     file_list = []
     # Define directories and files to ignore to avoid cluttering the prompt.
-    ignore_dirs = {".git", "__pycache__", "node_modules", ".venv", "env", "build", "dist"}
+    ignore_dirs = {
+        ".git",
+        "__pycache__",
+        "node_modules",
+        ".venv",
+        "env",
+        "build",
+        "dist",
+    }
 
     print(f"Scanning repository from '{os.path.abspath(root_dir)}'...")
 
@@ -62,7 +70,7 @@ def prepare_repo_reader_input(ticket_description: str, repo_root: str = ".") -> 
 
     # 2. Format the data into a single, structured string prompt for the agent.
     enhanced_prompt = (
-        f"Problem Description: \"{ticket_description}\"\n\n"
+        f'Problem Description: "{ticket_description}"\n\n'
         f"Repository File List:\n{json.dumps(repository_files, indent=2)}\n\n"
         "Based on the problem description, please identify the most relevant files."
     )
