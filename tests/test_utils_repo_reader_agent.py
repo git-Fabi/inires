@@ -1,9 +1,9 @@
-import tempfile
-import shutil
-import os
 import json
-import pytest
+import os
+import tempfile
+
 from flock.core import FlockAgent
+
 from src.agents.repo_reader_agent import RepoReaderAgent
 from src.utils.utils_repo_reader_agent import (
     setup_repo_reader_agent,
@@ -23,7 +23,8 @@ def test_setup_repo_reader_agent(monkeypatch):
         return dummy_agent
 
     monkeypatch.setattr(
-        "src.agents.repo_reader_agent.RepoReaderAgent.create_repo_reader_agent", dummy_create_repo_reader_agent
+        "src.agents.repo_reader_agent.RepoReaderAgent.create_repo_reader_agent",
+        dummy_create_repo_reader_agent,
     )
     result = setup_repo_reader_agent()
     assert result is dummy_agent
@@ -74,6 +75,6 @@ def test_prepare_repo_reader_input_formats_prompt(monkeypatch):
         "src.utils.utils_repo_reader_agent._scan_repository_filesystem", fake_scan
     )
     result = prepare_repo_reader_input(ticket, repo_root="irrelevant")
-    assert "Problem Description: \"Example bug description.\"" in result
+    assert 'Problem Description: "Example bug description."' in result
     assert json.dumps(fake_files, indent=2) in result
     assert "Based on the problem description" in result
