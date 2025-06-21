@@ -23,11 +23,11 @@ def mock_ticket() -> MagicMock:
 @patch("utils.utils_agents.setup_reader_agent")
 @patch("utils.utils_agents.Flock")
 def test_setup_agents(
-    mock_flock_class,
-    mock_setup_reader_agent,
-    mock_setup_repo_reader_agent,
-    mock_setup_solution_generator_agent,
-    mock_setup_writer_agent,
+    mock_flock_class: MagicMock,
+    mock_setup_reader_agent: MagicMock,
+    mock_setup_repo_reader_agent: MagicMock,
+    mock_setup_solution_generator_agent: MagicMock,
+    mock_setup_writer_agent: MagicMock,
 ) -> None:
     # Setup mock instances
     mock_flock_instance = MagicMock()
