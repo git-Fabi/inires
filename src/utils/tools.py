@@ -1,8 +1,10 @@
-import os
 import logging
+import os
+
 from flock.core import flock_tool
 
 LOGGER = logging.getLogger(__name__)
+
 
 @flock_tool
 async def read_repository_files(file_paths: list[str]) -> str:
@@ -15,7 +17,7 @@ async def read_repository_files(file_paths: list[str]) -> str:
     for file_path in file_paths:
         try:
             full_path = os.path.abspath(file_path)
-            with open(full_path, 'r', encoding='utf-8') as f:
+            with open(full_path, "r", encoding="utf-8") as f:
                 content = f.read()
                 formatted_content = (
                     f"---\nFile: `{file_path}`\n---\n```\n{content}\n```"

@@ -1,5 +1,6 @@
-import pytest
 from unittest.mock import MagicMock, patch, call
+
+import pytest
 
 from models.ticket import Ticket
 from utils.utils_agents import setup_agents, runner
@@ -51,7 +52,17 @@ def test_setup_agents(
 def test_runner(mock_flock_run, mock_ticket):
     mock_flock = MagicMock()
     mock_flock.run = mock_flock_run
-    mock_flock_run.return_value = {"context": "something useful"}
+    # Add a title attribute to the mock ticket
+    mock_ticket.title = "Mock Ticket Title"
+    # Set the return values for each call
+    mock_flock_run.side_effect = [
+        {
+            "context": "something useful",
+            "description": "Parsed description",
+        },  # First call (ticket reader)
+        {"relevant_files": ["file1.py", "file2.py"]},  # Second call (repo reader)
+        {"plan": ["step1", "step2"]},  # Third call (solution generator)
+    ]
 
     result = runner(mock_flock, mock_ticket, repository_input="test repository input")
     repository = {
@@ -61,6 +72,15 @@ def test_runner(mock_flock_run, mock_ticket):
         [
             call("ticket_reader_agent", input=mock_ticket.to_dict()),
             call("repo_reader_agent", input=repository),
+            call(
+                "solution_generator_agent",
+                input={
+                    "relevant_files_context": {
+                        "relevant_files": ["file1.py", "file2.py"]
+                    }
+                },
+            ),
         ]
     )
-    assert result == "ticket solution"
+    # The result should be the output of the last agent call
+    assert result == {"plan": ["step1", "step2"]}

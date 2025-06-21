@@ -1,4 +1,5 @@
 from flock.core import FlockAgent
+
 from src.agents.solution_generator_agent import SolutionGeneratorAgent
 
 

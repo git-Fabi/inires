@@ -1,6 +1,8 @@
 # agents/solution_generator_agent.py
 from flock.core import FlockAgent, FlockFactory
+
 from src.utils.tools import read_repository_files
+
 
 class SolutionGeneratorAgent:
     """
@@ -36,7 +38,7 @@ class SolutionGeneratorAgent:
             output="solution_plan: str | A JSON object with a 'plan' key containing a list of steps.",
             temperature=0.7,
             max_tokens=16384,
-            max_tool_calls = 1000,
-            tools=[read_repository_files]
+            max_tool_calls=1000,
+            tools=[read_repository_files],
         )
         return self.agent

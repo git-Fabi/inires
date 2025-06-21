@@ -1,9 +1,10 @@
-import os
 import json
 import logging
+import os
+
+from flock.core import FlockAgent
 
 from src.agents.repo_reader_agent import RepoReaderAgent
-from flock.core import FlockAgent
 
 
 def setup_repo_reader_agent() -> FlockAgent:
