@@ -1,5 +1,5 @@
 import pytest
-from models.ticket import Ticket  # Adjust path if needed
+from models.ticket import Ticket
 
 
 @pytest.fixture
