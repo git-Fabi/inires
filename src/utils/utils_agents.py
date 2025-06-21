@@ -1,7 +1,7 @@
 from models.Ticket import Ticket
 from flock.core import Flock
 
-from utils_reader_agent import setup_reader_agent
+from utils.utils_reader_agent import setup_reader_agent
 
 MODEL = "azure/gpt-4o-mini"
 
