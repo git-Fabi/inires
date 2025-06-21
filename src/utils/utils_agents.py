@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import Any, Optional
 
 from flock.core import Flock
 
@@ -30,7 +31,7 @@ def setup_agents() -> Flock:
     return flock
 
 
-def runner(flock: Flock, ticket: Ticket, repository_input: str = None) -> str:
+def runner(flock: Flock, ticket: Ticket, repository_input: Optional[str] = None) -> Any:
     """Runs the full agent pipeline in sequence.
 
     Args:
@@ -39,7 +40,7 @@ def runner(flock: Flock, ticket: Ticket, repository_input: str = None) -> str:
         repository_input: Optional custom repository input for testing.
 
     Returns:
-        The final solution plan as a string.
+        The final solution plan as a string or dictionary.
     """
     logging.info("--- STARTING AGENT PIPELINE ---")
 
@@ -60,7 +61,7 @@ def runner(flock: Flock, ticket: Ticket, repository_input: str = None) -> str:
     # Use provided repository input if available, otherwise generate it
     repo_reader_input_str = (
         repository_input
-        if repository_input
+        if repository_input is not None
         else prepare_repo_reader_input(ticket_description)
     )
     repo_reader_output_json = flock.run(

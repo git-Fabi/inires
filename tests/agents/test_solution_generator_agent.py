@@ -1,21 +1,27 @@
+import pytest
+from typing import Any
 from src.agents.solution_generator_agent import SolutionGeneratorAgent
 from src.utils.tools import read_repository_files
 
 
-def test_solution_generator_agent_initialization():
+class DummyFlockAgent:
+    pass
+
+
+def test_solution_generator_agent_initialization() -> None:
     """Test that a SolutionGeneratorAgent is initialized with the correct name and null agent."""
     agent = SolutionGeneratorAgent(name="test_agent")
     assert agent.name == "test_agent"
     assert agent.agent is None
 
 
-def test_create_solution_generator_agent(monkeypatch):
+def test_create_solution_generator_agent(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test that create_solution_generator_agent calls FlockFactory with correct parameters."""
     agent = SolutionGeneratorAgent(name="test_agent")
     dummy_agent = object()
 
     # Define a mock function to replace the real create_default_agent
-    def mock_create_default_agent(**kwargs):
+    def mock_create_default_agent(**kwargs: Any) -> Any:
         # Test that all required parameters are passed correctly
         assert kwargs["name"] == "test_agent"
         assert "expert software architect" in kwargs["description"]
@@ -41,7 +47,7 @@ def test_create_solution_generator_agent(monkeypatch):
     assert agent.agent is dummy_agent
 
 
-def test_read_repository_files_in_tools():
+def test_read_repository_files_in_tools() -> None:
     """Test that the read_repository_files tool is included in the agent's tools."""
     agent = SolutionGeneratorAgent()
     created_agent = agent.create_solution_generator_agent()
