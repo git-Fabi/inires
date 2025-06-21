@@ -1,4 +1,5 @@
 import json
+import logging
 
 from flock.core import Flock
 
@@ -15,7 +16,6 @@ from src.utils.utils_solution_generator_agent import setup_solution_generator_ag
 # This import now points to the new, dedicated tools file
 
 MODEL = "azure/gpt-4o-mini"
-
 
 def setup_agents() -> Flock:
     """Sets up the Flock instance with all agents and tools."""
