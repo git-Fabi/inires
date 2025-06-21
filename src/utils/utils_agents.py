@@ -67,7 +67,7 @@ def runner(flock: Flock, ticket: Ticket, repository_input: str = "") -> Any:
         "writer_agent",
         input={"plan": solution_plan_json},
     )
-    print(f"   -> Plan as Code: {generated_code.code}")
+    print(f"   -> Plan as Code: {generated_code}")
 
     print("\n--- AGENT PIPELINE FINISHED ---")
-    return solution_plan_json
+    return generated_code
