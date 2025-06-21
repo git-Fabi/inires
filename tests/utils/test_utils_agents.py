@@ -6,7 +6,7 @@ from utils.utils_agents import setup_agents, runner
 
 
 @pytest.fixture
-def mock_ticket():
+def mock_ticket() -> MagicMock:
     ticket = MagicMock(spec=Ticket)
     ticket.to_dict.return_value = {
         "ticket_title": "Fix logout issue",
@@ -20,8 +20,10 @@ def mock_ticket():
 @patch("utils.utils_agents.setup_reader_agent")
 @patch("utils.utils_agents.Flock")
 def test_setup_agents(
-    mock_flock_class, mock_setup_reader_agent, mock_setup_repo_reader_agent
-):
+    mock_flock_class: MagicMock,
+    mock_setup_reader_agent: MagicMock,
+    mock_setup_repo_reader_agent: MagicMock,
+) -> None:
     # Setup mock instances
     mock_flock_instance = MagicMock()
     mock_flock_class.return_value = mock_flock_instance
@@ -48,7 +50,7 @@ def test_setup_agents(
 
 
 @patch("utils.utils_agents.Flock.run")
-def test_runner(mock_flock_run, mock_ticket):
+def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
     mock_flock = MagicMock()
     mock_flock.run = mock_flock_run
     mock_flock_run.return_value = {"context": "something useful"}
