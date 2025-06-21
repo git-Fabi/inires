@@ -67,8 +67,8 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Project Dependencies
-        run: pip install -r requirements.txt
+      #- name: Install Project Dependencies
+      #  run: pip install -r requirements.txt
 
       # This is the core step where we run our agent system.
       #- name: Run FLOCK Agent System
@@ -77,7 +77,7 @@ jobs:
           # We must decode the base64 strings to get back the original title and body.
         #  ISSUE_TITLE: $(echo "${{ needs.read_ticket.outputs.issue_title_b64 }}" | base64 --decode)
          # ISSUE_BODY: $(echo "${{ needs.read_ticket.outputs.issue_body_b64 }}" | base64 --decode)
-          #ISSUE_NUMBER: $(echo "${{ needs.read_ticket.outputs.issue_number }}" | base64 --decode)
+          #ISSUE_NUMBER: $(echo "${{ needs.read_ticket.outputs.issue_number_b64 }}" | base64 --decode)
 
           # Secrets are passed to this job, as it's the one that needs them.
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
