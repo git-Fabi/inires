@@ -8,17 +8,17 @@ MODEL = "azure/gpt-4o-mini"
 
 def setup_agents() -> Flock:
     flock: Flock = Flock(model=MODEL, name="inires_flock")
-      
+
     reader_agent = setup_reader_agent()
     flock.add_agent(reader_agent)
-    
+
     repo_reader_agent = setup_repo_reader_agent()
     flock.add_agent(repo_reader_agent)
 
     return flock
 
 
-def runner(flock: Flock, ticket: Ticket,  repository_input: str) -> str:
+def runner(flock: Flock, ticket: Ticket, repository_input: str) -> str:
     processed_ticket = flock.run("ticket_reader_agent", input=ticket.to_dict())
     print(processed_ticket)
 

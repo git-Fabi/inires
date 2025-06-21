@@ -1,10 +1,10 @@
 from models.ticket import Ticket
-from utils.utils_agents import runner, setup_agents
 from src.utils.utils_agents import setup_agents, runner
+
 
 def main(ticket: Ticket, repository: str) -> str:
     inires_flock = setup_agents()
-    result = runner(inires_flock, ticket=ticket, repository)
+    result = runner(inires_flock, ticket=ticket, repository_input=repository)
 
     return result
 
