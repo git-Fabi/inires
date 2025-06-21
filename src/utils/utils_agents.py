@@ -31,7 +31,6 @@ def setup_agents() -> Flock:
     return flock
 
 
-
 def runner(flock: Flock, ticket: Ticket, repository_input: str = "") -> Any:
     print("--- STARTING AGENT PIPELINE ---")
 

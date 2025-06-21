@@ -3,6 +3,7 @@ from typing import Optional, Any
 from models.ticket import Ticket
 from utils.utils_agents import setup_agents, runner
 
+
 def main(ticket: Ticket, repository: Optional[str] = None) -> Any:
     """
     This is the main execution function.
