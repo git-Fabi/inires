@@ -1,4 +1,3 @@
-# repo_reader_agent.py
 from flock.core import FlockAgent, FlockFactory
 
 

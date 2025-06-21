@@ -1,7 +1,7 @@
 from typing import Any, Generator
+from unittest.mock import MagicMock, patch, AsyncMock
 
 import pytest
-from unittest.mock import MagicMock, patch, AsyncMock
 
 from src.agents.reader_agent import IssueReaderAgent
 

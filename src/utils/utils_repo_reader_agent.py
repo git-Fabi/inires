@@ -1,9 +1,10 @@
-import os
 import json
 import logging
+import os
+
+from flock.core import FlockAgent
 
 from src.agents.repo_reader_agent import RepoReaderAgent
-from flock.core import FlockAgent
 
 
 def setup_repo_reader_agent() -> FlockAgent:
@@ -25,7 +26,6 @@ def _scan_repository_filesystem(root_dir: str = ".") -> list[str]:
         A list of strings, where each string is a relative file path.
     """
     file_list = []
-    # Define directories and files to ignore to avoid cluttering the prompt.
     ignore_dirs = {
         ".git",
         "__pycache__",
@@ -35,17 +35,15 @@ def _scan_repository_filesystem(root_dir: str = ".") -> list[str]:
         "build",
         "dist",
     }
-
-    logging.info(f"Scanning repository from '{os.path.abspath(root_dir)}'...")
-
+    logging.info(f"Scanning repository from `{os.path.abspath(root_dir)}`...")
     for root, dirs, files in os.walk(root_dir):
-        # This line efficiently prunes the directories to prevent `os.walk` from traversing them.
         dirs[:] = [d for d in dirs if d not in ignore_dirs]
-
         for file in files:
             file_path = os.path.join(root, file)
-            file_list.append(os.path.relpath(file_path, root_dir).replace("\\", "/"))
-
+            if os.path.isfile(file_path):
+                file_list.append(
+                    os.path.relpath(file_path, root_dir).replace("\\", "/")
+                )
     logging.info(f"Found {len(file_list)} files in the repository.")
     return file_list
 

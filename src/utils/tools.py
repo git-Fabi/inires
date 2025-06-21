@@ -1,0 +1,35 @@
+import logging
+import os
+
+from flock.core import flock_tool
+
+LOGGER = logging.getLogger(__name__)
+
+
+@flock_tool
+def read_repository_files(file_paths: list[str]) -> str:
+    """
+    Reads the content of one or more files from the local repository filesystem.
+    This tool is essential for fetching the context needed to analyze a problem.
+    """
+    LOGGER.info(f"Tool 'read_repository_files' called with paths: {file_paths}")
+    all_contents = []
+    for file_path in file_paths:
+        try:
+            full_path = os.path.abspath(file_path)
+            with open(full_path, "r", encoding="utf-8") as f:
+                content = f.read()
+                formatted_content = (
+                    f"---\nFile: `{file_path}`\n---\n```\n{content}\n```"
+                )
+                all_contents.append(formatted_content)
+            LOGGER.info(f"Successfully read file: {file_path}")
+        except FileNotFoundError:
+            error_message = f"---\nFile: `{file_path}`\n---\nError: File not found.\n"
+            all_contents.append(error_message)
+            LOGGER.warning(f"File not found: {file_path}")
+        except Exception as e:
+            error_message = f"---\nFile: `{file_path}`\n---\nError: Could not read file. Details: {e}\n"
+            all_contents.append(error_message)
+            LOGGER.error(f"Error reading file {file_path}: {e}")
+    return "\n\n".join(all_contents)
