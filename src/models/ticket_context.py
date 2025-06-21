@@ -1,8 +1,8 @@
 class TicketContext:
     def __init__(self) -> None:
-        self.ticket_id: str
-        self.best_practices: str
-        self.ticket_context: str
+        self.ticket_id: str = ""
+        self.best_practices: str = ""
+        self.ticket_context: str = ""
 
     @staticmethod
     def get_representation_for_agent() -> str:
