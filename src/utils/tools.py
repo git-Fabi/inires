@@ -2,6 +2,7 @@ import logging
 import os
 from typing import List
 from flock.core import flock_tool
+from pathlib import Path
 
 LOGGER = logging.getLogger(__name__)
 
@@ -33,3 +34,15 @@ def read_repository_files(file_paths: List[str]) -> str:
             all_contents.append(error_message)
             LOGGER.error(f"Error reading file {file_path}: {e}")
     return "\n\n".join(all_contents)
+
+
+@flock_tool # type: ignore
+def write_code_to_file(file_path: str, code: str) -> None:
+    try:
+        # Ensure the directory exists
+        if not Path(file_path).exists():
+            Path(file_path).mkdir(parents=True, exist_ok=True)
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(code)
+    except Exception as e:
+        raise FileNotFoundError(f"Error writing code to file: {file_path}: {e}")
