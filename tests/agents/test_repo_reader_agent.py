@@ -1,5 +1,6 @@
-from unittest.mock import MagicMock
 from typing import Any
+import pytest
+
 from src.agents.repo_reader_agent import RepoReaderAgent
 
 
@@ -8,12 +9,14 @@ class DummyFlockAgent:
 
 
 def test_repo_reader_agent_initialization() -> None:
+    """Test that the RepoReaderAgent initializes with the correct name and null agent."""
     agent = RepoReaderAgent(name="test_agent")
     assert agent.name == "test_agent"
     assert agent.agent is None
 
 
-def test_create_repo_reader_agent(monkeypatch: MagicMock) -> None:
+def test_create_repo_reader_agent(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test that create_repo_reader_agent calls FlockFactory with correct parameters."""
     agent = RepoReaderAgent(name="test_agent")
     dummy_instance = DummyFlockAgent()
 
