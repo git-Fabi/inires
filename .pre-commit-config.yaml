@@ -41,4 +41,4 @@ repos:
         name: Run Pytest tests
         entry: pytest tests/
         language: system
-        types: [python]
+        always_run: true
