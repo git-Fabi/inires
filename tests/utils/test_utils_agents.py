@@ -17,6 +17,8 @@ def mock_ticket() -> MagicMock:
     return ticket
 
 
+@patch("utils.utils_agents.setup_writer_agent")
+@patch("utils.utils_agents.setup_solution_generator_agent")
 @patch("utils.utils_agents.setup_repo_reader_agent")
 @patch("utils.utils_agents.setup_reader_agent")
 @patch("utils.utils_agents.Flock")
@@ -24,6 +26,8 @@ def test_setup_agents(
     mock_flock_class: MagicMock,
     mock_setup_reader_agent: MagicMock,
     mock_setup_repo_reader_agent: MagicMock,
+    mock_setup_solution_generator_agent: MagicMock,
+    mock_setup_writer_agent: MagicMock,
 ) -> None:
     # Setup mock instances
     mock_flock_instance = MagicMock()
@@ -35,6 +39,12 @@ def test_setup_agents(
     mock_repo_reader_agent = MagicMock()
     mock_setup_repo_reader_agent.return_value = mock_repo_reader_agent
 
+    mock_solution_generator_agent = MagicMock()
+    mock_setup_solution_generator_agent.return_value = mock_solution_generator_agent
+
+    mock_writer_agent = MagicMock()
+    mock_setup_writer_agent.return_value = mock_writer_agent
+
     # Call the function
     flock = setup_agents()
 
@@ -44,8 +54,15 @@ def test_setup_agents(
     )
     mock_setup_reader_agent.assert_called_once()
     mock_setup_repo_reader_agent.assert_called_once()
+    mock_setup_solution_generator_agent.assert_called_once()
+    mock_setup_writer_agent.assert_called_once()
     mock_flock_instance.add_agent.assert_has_calls(
-        [call(mock_reader_agent), call(mock_repo_reader_agent)]
+        [
+            call(mock_reader_agent),
+            call(mock_repo_reader_agent),
+            call(mock_solution_generator_agent),
+            call(mock_writer_agent),
+        ]
     )
     assert flock == mock_flock_instance
 
@@ -54,7 +71,6 @@ def test_setup_agents(
 def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
     mock_flock = MagicMock()
     mock_flock.run = mock_flock_run
-    # Add a title attribute to the mock ticket
     mock_ticket.title = "Mock Ticket Title"
     # Set the return values for each call
     mock_flock_run.side_effect = [
@@ -64,16 +80,19 @@ def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
         },  # First call (ticket reader)
         {"relevant_files": ["file1.py", "file2.py"]},  # Second call (repo reader)
         {"plan": ["step1", "step2"]},  # Third call (solution generator)
+        {"code": "Generated code based on the plan"},  # Fourth call (writer)
     ]
 
     result = runner(mock_flock, mock_ticket, repository_input="test repository input")
-    repository = {
-        "repository+ticket_context": "test repository input",
-    }
     mock_flock.run.assert_has_calls(
         [
             call("ticket_reader_agent", input=mock_ticket.to_dict()),
-            call("repo_reader_agent", input=repository),
+            call(
+                "repo_reader_agent",
+                input={
+                    "repository+ticket_context": "test repository input",
+                },
+            ),
             call(
                 "solution_generator_agent",
                 input={
@@ -82,7 +101,8 @@ def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
                     }
                 },
             ),
+            call("writer_agent", input={"plan": {"plan": ["step1", "step2"]}}),
         ]
     )
-    # The result should be the output of the last agent call
-    assert result == {"plan": ["step1", "step2"]}
+
+    assert result == {"code": "Generated code based on the plan"}

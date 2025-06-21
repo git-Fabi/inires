@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from src.agents.reader_agent import IssueReaderAgent
+from agents.reader_agent import IssueReaderAgent
 
 
 @pytest.fixture
