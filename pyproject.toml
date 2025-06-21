@@ -18,4 +18,6 @@ dev = [
     "bandit>=1.8.5",
     "black>=25.1.0",
 ]
+[tool.mypy]
+ignore_missing_imports = true
 

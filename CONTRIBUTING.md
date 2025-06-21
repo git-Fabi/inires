@@ -30,8 +30,8 @@ pip install uv
 
 ```bash
 # Create and activate a virtual environment using uv
-uv venv venv
-source venv/bin/activate
+uv .venv .venv
+source .venv/bin/activate
 ```
 
 Option 1: Using pyproject.toml (recommended)
@@ -103,7 +103,7 @@ mypy .
 ### Check Security
 
 ```bash
-bandit -r .
+bandit -r 
 ```
 
 ### Analyze Complexity
