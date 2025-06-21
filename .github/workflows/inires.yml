@@ -1,52 +1,87 @@
-name: FLOCK AI Ticket Resolver
+# A human-readable name for the workflow.
+name: FLOCK AI Ticket Resolver (Two-Job)
 
-# Grant the necessary permissions for the GITHUB_TOKEN used by the job.
-# This is required for creating branches, committing code, and posting comments.
-permissions:
-  issues: write
-  contents: write
-  pull-requests: write
-
+# ---
+# TRIGGER
+# ---
 # This workflow is triggered whenever a new issue is opened.
 on:
   issues:
     types: [opened]
 
+# ---
+# JOBS
+# ---
+# This workflow is split into two distinct jobs.
 jobs:
-  resolve-ticket:
-    name: Resolve Ticket with FLOCK AI
+  # --- JOB 1: Read and Prepare Ticket Data ---
+  # The sole purpose of this job is to read the triggering issue's data
+  # and prepare it for consumption by the next job.
+  read_ticket:
     runs-on: ubuntu-latest
+    permissions:
+      issues: read
+    outputs:
+      issue_title_b64: ${{ steps.set_output.outputs.issue_title_b64 }}
+      issue_body_b64: ${{ steps.set_output.outputs.issue_body_b64 }}
+      issue_number_b64: ${{ steps.set_output.outputs.issue_number_b64 }}
     steps:
-      # Step 1: Check out the repository's code onto the runner's filesystem.
-      # This makes the codebase accessible to our Python script.
-      - name: 1. Check out repository code
+      - id: set_output
+        name: Get Issue Content
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          title_b64=$(printf '%s' "$ISSUE_TITLE" | base64 -w 0)
+          body_b64=$(printf '%s' "$ISSUE_BODY" | base64 -w 0)
+          number_b64=$(printf '%s' "$ISSUE_NUMBER" | base64 -w 0)
+          
+          
+          echo "issue_title_b64=$title_b64" >> $GITHUB_OUTPUT
+          echo "issue_body_b64=$body_b64" >> $GITHUB_OUTPUT
+          echo "issue_number_b64=$number_b64" >> $GITHUB_OUTPUT
+          
+
+  # --- JOB 2: Run the FLOCK Agent System ---
+  # This job does the main work. It consumes the data from the first job,
+  # checks out the code, and runs the agent system.
+  resolve_ticket:
+    name: 2. Resolve Ticket with FLOCK AI
+    runs-on: ubuntu-latest
+    permissions:
+      # This job needs write access to issues to create branches, commits, and pull requests.
+      issues: write
+      contents: write
+      pull-requests: write
+
+    needs: read_ticket
+
+    steps:
+      # We check out the code in this job, as it's where the code is actually needed.
+      - name: Check out repository code
         uses: actions/checkout@v4
 
-      # Step 2: Set up the Python environment for the job.
-      - name: 2. Set up Python Environment
+      - name: Set up Python Environment
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      # Step 3: Install all project dependencies from the requirements file.
-      - name: 3. Install Project Dependencies
+      - name: Install Project Dependencies
         run: pip install -r requirements.txt
 
-      # Step 4: Run the main agent system script.
-      # We pass necessary data and secrets as environment variables.
-      - name: 4. Run FLOCK Agent System
+      # This is the core step where we run our agent system.
+      - name: Run FLOCK Agent System
         env:
-          # Data from the triggering event (the issue) is passed to the script.
-          ISSUE_TITLE: ${{ github.event.issue.title }}
-          ISSUE_BODY: ${{ github.event.issue.body }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          # We access the outputs from the 'read_ticket' job using the 'needs' context.
+          # We must decode the base64 strings to get back the original title and body.
+          ISSUE_TITLE: $(echo "${{ needs.read_ticket.outputs.issue_title_b64 }}" | base64 --decode)
+          ISSUE_BODY: $(echo "${{ needs.read_ticket.outputs.issue_body_b64 }}" | base64 --decode)
+          ISSUE_NUMBER: $(echo "${{ needs.read_ticket.outputs.issue_number }}" | base64 --decode)
 
-          # The GITHUB_TOKEN is a temporary, auto-generated secret for authenticating API calls.
+          # Secrets are passed to this job, as it's the one that needs them.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-          # IMPORTANT: You must create 'OPENAI_API_KEY' in your repository secrets.
-          # Go to: Settings > Secrets and variables > Actions > New repository secret.
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
-        # This command executes the main script, starting the agent workflow.
+        # Finally, execute the main Python script.
         run: python main_flock_script.py
