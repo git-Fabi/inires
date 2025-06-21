@@ -1,5 +1,4 @@
 from typing import Any
-from unittest.mock import MagicMock
 import pytest
 
 from src.agents.repo_reader_agent import RepoReaderAgent
