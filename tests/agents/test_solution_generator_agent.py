@@ -1,5 +1,7 @@
-import pytest
 from typing import Any
+
+import pytest
+
 from src.agents.solution_generator_agent import SolutionGeneratorAgent
 from src.utils.tools import read_repository_files
 

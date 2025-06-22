@@ -1,11 +1,20 @@
 import argparse
+
 from typing import Optional, Any
 
 from models.ticket import Ticket
-from utils.utils_agents import setup_agents, runner
+from utils.utils_agents import (
+    setup_agents,
+    runner,
+    DEFAULT_EVALUATION_THRESHOLD,
+)
 
 
-def main(ticket: Ticket, repository: Optional[str] = None) -> Any:
+def main(
+    ticket: Ticket,
+    repository: Optional[str] = None,
+    evaluation_threshold: int = DEFAULT_EVALUATION_THRESHOLD,
+) -> Any:
     """
     This is the main execution function.
     It sets up the application, creates test data, and runs the agent pipeline.
@@ -14,11 +23,17 @@ def main(ticket: Ticket, repository: Optional[str] = None) -> Any:
     inires_flock = setup_agents()
 
     print("--- Kicking off Agent Pipeline ---")
-    result = runner(inires_flock, ticket=ticket, repository_input=repository)
+    result = runner(
+        inires_flock,
+        ticket=ticket,
+        repository_input=repository or "",
+        evaluation_threshold=evaluation_threshold,
+    )
     return result
 
 
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser(description="Inires Agent Pipeline")
     parser.add_argument(
         "--ticket-number", type=str, required=True, help="Ticket ID to process"
@@ -35,4 +50,4 @@ if __name__ == "__main__":
         ticket_title=args.ticket_title,
         ticket_body=args.ticket_body,
     )
-    final_solution_plan = main(ticket=ticket)
+    final_solution_plan = main(ticket=ticket, evaluation_threshold=10)

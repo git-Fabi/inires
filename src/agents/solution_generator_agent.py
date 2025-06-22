@@ -1,4 +1,4 @@
-# agents/solution_generator_agent.py
+# src/agents/solution_generator_agent.py
 from flock.core import FlockAgent, FlockFactory
 
 from src.utils.tools import read_repository_files
@@ -18,11 +18,11 @@ class SolutionGeneratorAgent:
         Creates and configures the FlockAgent for generating a solution plan.
         """
         description = (
-            "You are an expert software architect AI. Your task is to solve a given software problem. "
-            "You will be provided with the problem description and a list of potentially relevant file paths. "
-            "To solve the problem, you MUST first use the 'read_repository_files' tool to get the content of those files. "
-            "After you have read the files, analyze their content and the problem description to create a clear, "
-            "step-by-step, natural-language plan for the fix. "
+            "You are an expert software architect AI. Your task is to solve a given software problem by creating a step-by-step plan. "
+            "You will be provided with relevant file paths and, crucially, feedback on your previous plan if it was inadequate. "
+            "If feedback is provided (i.e., it is not the first attempt), you MUST use it to refine your plan. "
+            "Your primary goal is to create a clear, step-by-step, natural-language plan for the fix based on the file contents and the feedback. "
+            "You MUST use the 'read_repository_files' tool to read the contents of the files. "
             "For each step in the plan that involves a file modification, you MUST specify the full absolute file path. "
             "Do NOT write any code. Only create the plan. "
             "Your final output must be ONLY a JSON object with a single key 'plan', "
@@ -32,9 +32,8 @@ class SolutionGeneratorAgent:
         self.agent = FlockFactory.create_default_agent(
             name=self.name,
             description=description,
-            # The input will now be the output from the RepoReader agent.
-            input="relevant_files_context: str | This is a JSON object from the previous agent containing a list of relevant file paths.",
-            output="solution_plan: str | A JSON object with a 'plan' key containing a list of steps and the full file paths for the solution for existing relevant files or destinations for new files.",
+            input="relevant_files_context: str, feedback: str | A JSON string of file paths, and an optional string with feedback for refinement.",
+            output="solution_plan: str | A JSON object with a 'plan' key containing a list of steps.",
             temperature=0.7,
             max_tokens=16384,
             max_tool_calls=1000,

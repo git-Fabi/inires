@@ -1,5 +1,6 @@
-import pytest
 from unittest.mock import patch, MagicMock
+
+import pytest
 
 from src.utils.utils_writer_agent import setup_writer_agent
 
