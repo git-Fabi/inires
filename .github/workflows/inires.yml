@@ -132,7 +132,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           git commit -m "Resolve ticket #${ISSUE_NUMBER} with FLOCK AI"
-          git push 
+          git push origin "${{ needs.create_branch.outputs.new_branch_name }}"
 
   pull_request:
     name: Create Pull Request
@@ -147,7 +147,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ needs.create_branch.outputs.new_branch_name }}
-          clean: 'true'
           fetch-depth: 0
 
       - name: Decode Issue Data
