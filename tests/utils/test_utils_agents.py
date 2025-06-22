@@ -93,9 +93,7 @@ def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
         {
             "solution_plan": '{"plan": ["step1", "step2"]}'
         },  # Fourth call (solution generator)
-        {
-            "evaluation": '{"score": 9, "feedback": ""}'
-        },  # Fifth call (evaluation agent)
+        {"evaluation": '{"score": 9, "feedback": ""}'},  # Fifth call (evaluation agent)
         {"code": "Generated code based on the plan"},  # Sixth call (writer)
     ]
 
