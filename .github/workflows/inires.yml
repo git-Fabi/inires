@@ -115,9 +115,9 @@ jobs:
           AZURE_API_KEY: ${{ secrets.AZURE_API_KEY }}
           AZURE_API_BASE: ${{ secrets.AZURE_API_BASE }}
         run: |
-          export ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode)
-          export ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode)
-          export ISSUE_BODY=$(echo "$ISSUE_BODY_B64" | base64 --decode)
+          echo "ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode | tr -d '\n')" >> $GITHUB_ENV
+          echo "ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode | tr -d '\n')" >> $GITHUB_ENV
+          echo "ISSUE_BODY=$(echo "$ISSUE_BODY_B64" | base64 --decode | tr -d '\n')" >> $GITHUB_ENV
           python ${{ github.workspace }}/src/main.py --ticket-number "$ISSUE_NUMBER" --ticket-title "$ISSUE_TITLE" --ticket-body "$ISSUE_BODY"
 
       - name: Commit and Push Changes
@@ -161,6 +161,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           title: "${{ env.ISSUE_TITLE }} (closes #${{ env.ISSUE_NUMBER }})"
           body: "This PR resolves the issue #${{ env.ISSUE_NUMBER }}"
           branch: ${{ needs.create_branch.outputs.new_branch_name }}
