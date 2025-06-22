@@ -7,6 +7,7 @@ This project enforces code quality and security using:
 - [`mypy`](https://mypy-lang.org/): Static type checker
 - [`bandit`](https://bandit.readthedocs.io/en/latest/): Security analyzer
 - [`radon`](https://radon.readthedocs.io/en/latest/): Code complexity analysis
+- [`pytest`](https://docs.pytest.org/en/stable/): Testing framework
 
 ---
 
@@ -85,31 +86,32 @@ Run the following tools before committing code:
 ### Format Code
 
 ```bash
-black .
+black src/ tests/
 ```
 
 ### Lint Code
 
 ```bash
-ruff .
+ruff check src/ tests/
 ```
 
 ### Static Type checking
 
 ```bash
-mypy .
+mypy --strict --ignore-missing-imports --explicit-package-bases src/ tests/
 ```
 
 ### Check Security
 
 ```bash
-bandit -r 
+bandit -r src/ tests/ --skip B101
 ```
 
 ### Analyze Complexity
 
 ```bash
-radon cc . -s -a
+radon cc src/ tests/
+radon mi src/ tests/
 ```
 
 ---
