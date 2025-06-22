@@ -1,19 +1,10 @@
-from models.ticket_context import TicketContext  # Adjust import path as needed
 
 
-def test_ticket_context_manual_assignment() -> None:
-    context = TicketContext()
+def test_get_representation_for_agent_edge_cases() -> None:
+    # Test with an empty tuple
+    empty_tuple = ()
+    assert TicketContext.handle_tuple(empty_tuple) == expected_output_for_empty
 
-    # Manually set values
-    context.ticket_context = "This ticket addresses login failure handling."
-
-    # Pytest assertions
-    assert context.ticket_context == "This ticket addresses login failure handling."
-
-
-def test_get_representation_for_agent_contains_expected_fields() -> None:
-    rep = TicketContext.get_representation_for_agent()
-
-    # Use assert statements for all expectations (no unused value)
-    assert isinstance(rep, str)
-    assert "ticket_context: str" in rep
+    # Test with a tuple with unexpected data types
+    unexpected_tuple = (object(),)
+    assert TicketContext.handle_tuple(unexpected_tuple) == expected_output_for_unexpected

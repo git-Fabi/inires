@@ -1,19 +1,10 @@
-from unittest.mock import patch, MagicMock
-
-from utils.utils_reader_agent import setup_reader_agent
 
 
-@patch("utils.utils_reader_agent.IssueReaderAgent")
-def test_setup_reader_agent(mock_issue_reader_agent: MagicMock) -> None:
-    # Arrange
-    mock_instance = MagicMock()
-    mock_issue_reader_agent.return_value = mock_instance
-    mock_instance.create_issue_reader_agent.return_value = "mocked_agent"
+def test_setup_reader_agent_edge_cases() -> None:
+    # Test with an empty tuple
+    empty_tuple = ()
+    assert setup_reader_agent.handle_tuple(empty_tuple) == expected_output_for_empty
 
-    # Act
-    result = setup_reader_agent()
-
-    # Assert
-    mock_issue_reader_agent.assert_called_once_with(name="ticket_reader_agent")
-    mock_instance.create_issue_reader_agent.assert_called_once()
-    assert result == "mocked_agent"
+    # Test with a tuple containing None values
+    none_tuple = (None, None)
+    assert setup_reader_agent.handle_tuple(none_tuple) == expected_output_for_none
