@@ -47,6 +47,8 @@ jobs:
     needs: read_ticket
     outputs:
         new_branch_name: ${{ steps.create_branch.outputs.new_branch_name }}
+    permissions:
+      contents: write
     steps:
         - name: Checkout main branch
           uses: actions/checkout@v4
@@ -111,10 +113,6 @@ jobs:
           ISSUE_TITLE_B64: ${{ needs.read_ticket.outputs.issue_title_b64 }}
           ISSUE_BODY_B64: ${{ needs.read_ticket.outputs.issue_body_b64 }}
 
-          #Secrets are passed to this job, as it's the one that needs them.
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
         run: |
           export ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode)
           export ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode)
@@ -126,7 +124,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Resolve ticket #${{ needs.read_ticket.outputs.issue_number_b64 }} with FLOCK AI"
+          git commit -m "Resolve ticket #${ISSUE_NUMBER} with FLOCK AI"
           git push 
 
   pull_request:
