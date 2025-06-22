@@ -1,6 +1,6 @@
 from flock.core import FlockAgent, Flock
 import json
-from typing import Any, Tuple, Dict
+from typing import Any, Tuple, Dict, Optional
 
 from src.agents.evaluation_agent import EvaluationAgent
 
@@ -22,7 +22,7 @@ def run_evaluation_loop(
     repo_context_str: str,
     ticket_context: Dict[str, Any],
     evaluation_threshold: int = DEFAULT_EVALUATION_THRESHOLD,
-) -> Tuple[str, int]:
+) -> Tuple[Optional[str], int]:
     """
     Runs the plan generation and evaluation loop to get the best solution plan.
 
@@ -33,9 +33,9 @@ def run_evaluation_loop(
         evaluation_threshold: Minimum score threshold to consider a plan acceptable
 
     Returns:
-        Tuple containing (best_plan, best_score)
+        Tuple containing (best_plan, best_score), where best_plan may be None if no plan was generated
     """
-    best_plan = None
+    best_plan: Optional[str] = None
     best_score = -1
     feedback = "No feedback yet. This is the first attempt."
 
@@ -93,4 +93,5 @@ def run_evaluation_loop(
                 f"   [+] Plan score {score} is below threshold of {evaluation_threshold}. Refining with feedback: {feedback}"
             )
 
-    return best_plan, best_score
+    # Guarantee that we always return a string for best_plan, even if it's empty
+    return (best_plan or "{}"), best_score

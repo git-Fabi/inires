@@ -5,7 +5,7 @@ from src.models.ticket import Ticket
 from src.utils.utils_evaluation_agent import (
     setup_evaluation_agent,
     run_evaluation_loop,
-    DEFAULT_EVALUATION_THRESHOLD,
+    DEFAULT_EVALUATION_THRESHOLD,  # Re-export this constant
 )
 from src.utils.utils_reader_agent import setup_reader_agent
 from src.utils.utils_repo_reader_agent import (
@@ -16,6 +16,9 @@ from src.utils.utils_solution_generator_agent import setup_solution_generator_ag
 from src.utils.utils_writer_agent import setup_writer_agent
 
 MODEL = "azure/gpt-4o-mini"
+
+# Re-export the constant so it can be imported from this module
+__all__ = ["setup_agents", "runner", "DEFAULT_EVALUATION_THRESHOLD"]
 
 
 def setup_agents() -> Flock:

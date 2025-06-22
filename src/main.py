@@ -2,8 +2,8 @@ import argparse
 
 from typing import Optional, Any
 
-from src.models.ticket import Ticket
-from src.utils.utils_agents import (
+from models.ticket import Ticket
+from utils.utils_agents import (
     setup_agents,
     runner,
     DEFAULT_EVALUATION_THRESHOLD,
