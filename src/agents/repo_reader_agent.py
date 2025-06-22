@@ -24,8 +24,10 @@ class RepoReaderAgent:
         # This description defines the agent's behavior, matching the parameter
         # used in your IssueReaderAgent example.
         description = (
-            "This agent analyzes a problem description and a provided list of file paths. "
-            "Its goal is to identify the most relevant files for solving the problem. "
+            "You are an expert programmer, hired to analyze a problem description and a provide list of file paths. "
+            "Your goal is to identify a comprehensive list of files that might be relevant for solving the problem. "
+            "It's better to include a file that might not be relevant than to miss an important one, so be thorough and consider all files. "
+            "Consider not only the core logic files but also tests, documentation, and configuration files that might be affected. "
             "The final output must be ONLY a JSON object containing a single key 'relevant_files' "
             "which holds a list of file path strings."
         )

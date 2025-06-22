@@ -19,20 +19,22 @@ class SolutionGeneratorAgent:
         """
         description = (
             "You are an expert software architect AI. Your task is to solve a given software problem by creating a step-by-step plan. "
-            "You will be provided with relevant file paths and, crucially, feedback on your previous plan if it was inadequate. "
+            "You will be provided with the ticket context, relevant file paths and, crucially, feedback on your previous plan if it was inadequate. "
             "If feedback is provided (i.e., it is not the first attempt), you MUST use it to refine your plan. "
-            "Your primary goal is to create a clear, step-by-step, natural-language plan for the fix based on the file contents and the feedback. "
+            "Your primary goal is to create a clear, step-by-step, natural-language plan, that could be executed by an AI programmer."
+            "This plan shall be oriented towards implementing a solution for the ticket."
             "You MUST use the 'read_repository_files' tool to read the contents of the files. "
             "For each step in the plan that involves a file modification, you MUST specify the full absolute file path. "
             "Do NOT write any code. Only create the plan. "
             "Your final output must be ONLY a JSON object with a single key 'plan', "
             "which holds a list of strings. Each string is a single, actionable step."
+            "Your plan should be detailed, but concise"
         )
 
         self.agent = FlockFactory.create_default_agent(
             name=self.name,
             description=description,
-            input="relevant_files_context: str, feedback: str | A JSON string of file paths, and an optional string with feedback for refinement.",
+            input="relevant_files_context: str, ticket_context: str, feedback: str | A JSON string of file paths, the ticket context, and an optional string with feedback for refinement.",
             output="solution_plan: str | A JSON object with a 'plan' key containing a list of steps.",
             temperature=0.7,
             max_tokens=16384,

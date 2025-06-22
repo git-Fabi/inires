@@ -36,7 +36,7 @@ def run_evaluation_loop(
         Tuple containing (best_plan, best_score), where best_plan may be None if no plan was generated
     """
     best_plan: Optional[str] = None
-    best_score = -1
+    best_score = -1.0
     feedback = "No feedback yet. This is the first attempt."
 
     print("\n[3/4] Entering Generation/Evaluation Loop...")
@@ -70,11 +70,11 @@ def run_evaluation_loop(
 
         try:
             evaluation = json.loads(evaluation_str)
-            score = int(evaluation.get("score", 0))
+            score = int(evaluation.get("score", 0.0))
             feedback = evaluation.get("feedback", "No feedback provided.")
         except (ValueError, AttributeError) as e:
             print(f"      -> ERROR: Could not parse evaluation. Retrying. Details: {e}")
-            score = 0
+            score = 0.0
             feedback = "The evaluation output was malformed. Please provide a valid JSON with 'score' and 'feedback'."
             continue
 
