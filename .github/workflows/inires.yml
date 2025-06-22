@@ -165,5 +165,6 @@ jobs:
           title: "${{ env.ISSUE_TITLE }} (closes #${{ env.ISSUE_NUMBER }})"
           body: "This PR resolves the issue #${{ env.ISSUE_NUMBER }}"
           branch: ${{ needs.create_branch.outputs.new_branch_name }}
+          base: main
           commit-message: "Resolve ticket #${{ env.ISSUE_NUMBER }}"
           author: "inirest-bot[bot]"
