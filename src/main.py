@@ -20,12 +20,12 @@ def main(ticket: Ticket, repository: Optional[str] = None) -> Any:
 if __name__ == "__main__":
     print("--- Preparing Test Ticket ---")
     sample_ticket = Ticket(
-        ticket_title="Password Reset is not actually changing the password",
+        ticket_title="RestApi with sqlite connection",
         ticket_body=(
-            "The password reset email is being sent correctly, but after the user "
-            "submits the new password, their old password still works. The password is not "
-            "actually being updated. I think the issue might be in the `reset_password` "
-            "function within `src/services/auth_service.py`."
+            "Create a REST API that connects to a SQLite database. "
+            "The API should support basic CRUD operations for a simple resource, "
+            "such as 'users' or 'products'. Ensure that the API is well-documented "
+            "and includes error handling for common scenarios."
         ),
         ticket_number="TICK-456",
     )
