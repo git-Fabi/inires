@@ -143,12 +143,6 @@ jobs:
       pull-requests: write
     if: ${{ success() }}
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.create_branch.outputs.new_branch_name }}
-          fetch-depth: 0
-
       - name: Decode Issue Data
         id: decode_issue_data
         env:
@@ -171,5 +165,3 @@ jobs:
           body: "This PR resolves the issue #${{ env.ISSUE_NUMBER }}"
           branch: ${{ needs.create_branch.outputs.new_branch_name }}
           base: main
-          commit-message: "Resolve ticket #${{ env.ISSUE_NUMBER }}"
-          author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
