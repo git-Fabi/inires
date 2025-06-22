@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from utils.utils_reader_agent import setup_reader_agent
 
 
-@patch("utils.utils_reader_agent.IssueReaderAgent")
+@patch("utils.utils_reader_agent.TicketAgent")
 def test_setup_reader_agent(mock_issue_reader_agent: MagicMock) -> None:
     # Arrange
     mock_instance = MagicMock()

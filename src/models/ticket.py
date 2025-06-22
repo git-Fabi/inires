@@ -15,6 +15,6 @@ class Ticket:
     def get_representation_for_agent() -> str:
         return (
             "ticket_title: str | The title of the ticket, "
-            "ticket_body: str | The description of the ticket, "
-            "ticket_number: str | Unique identifier for the ticket"
+            "ticket_body: str | The description of the ticket in markdown format, "
+            "ticket_number: str | Unique identifier for the ticket."
         )

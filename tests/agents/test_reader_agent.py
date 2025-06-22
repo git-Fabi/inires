@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from agents.reader_agent import IssueReaderAgent
+from agents.ticket_agent import TicketAgent
 
 
 @pytest.fixture
@@ -28,7 +28,7 @@ def mock_flock_factory() -> Generator[Tuple[MagicMock, MagicMock], None, None]:
 
 
 def test_issue_reader_agent_initialization() -> None:
-    agent = IssueReaderAgent("Reader1")
+    agent = TicketAgent("Reader1")
     assert agent.name == "Reader1"
 
 
@@ -39,7 +39,7 @@ def test_create_issue_reader_agent(
     mock_ticket_repr, mock_context_repr = mock_ticket_and_context
     mock_factory, mock_agent = mock_flock_factory
 
-    agent = IssueReaderAgent("Reader2")
+    agent = TicketAgent("Reader2")
     returned_agent = agent.create_issue_reader_agent()
 
     # Ensure factory is called with correct parameters

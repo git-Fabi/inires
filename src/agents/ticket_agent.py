@@ -4,7 +4,7 @@ from models.ticket import Ticket
 from models.ticket_context import TicketContext
 
 
-class IssueReaderAgent:
+class TicketAgent:
     """
     A class representing a reader agent that can read and process text.
     """
@@ -12,11 +12,13 @@ class IssueReaderAgent:
     def __init__(self, name: str) -> None:
         self.name = name
         self.description = (
-            "You are a reader agent that reads and processes "
-            "tickets. Your task is to read the ticket and "
-            "generate a context such that a developer can "
-            "implement a solution for the ticket according to "
-            "best practices."
+            "You are a very good reader, you love reading and understanding the "
+            "most important context. Most of the time you read "
+            "github tickets. It is your task to read and understand these tickets, "
+            "then you should explain the context such that a developer can "
+            "implement a solution for the ticket according to your context."
+            "Understand that your output will be used by a developer to implement a solution, "
+            "so you should be as precise and detailed as possible."
         )
 
     def create_issue_reader_agent(self) -> FlockAgent:
