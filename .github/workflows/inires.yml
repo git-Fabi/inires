@@ -38,9 +38,39 @@ jobs:
           number_b64=$(printf '%s' "$ISSUE_NUMBER" | base64 -w 0)
           
           
-          echo "issue_title_b64=$title_b64" >> $GITHUB_OUTPUT
-          echo "issue_body_b64=$body_b64" >> $GITHUB_OUTPUT
-          echo "issue_number_b64=$number_b64" >> $GITHUB_OUTPUT
+          echo "issue_title_b64=$title_b64" >> "$GITHUB_OUTPUT"
+          echo "issue_body_b64=$body_b64" >> "$GITHUB_OUTPUT"
+          echo "issue_number_b64=$number_b64" >> "$GITHUB_OUTPUT"
+          
+  create_branch:
+    runs-on: ubuntu-latest
+    needs: read_ticket
+    outputs:
+        new_branch_name: ${{ steps.create_branch.outputs.new_branch_name }}
+    steps:
+        - name: Checkout main branch
+          uses: actions/checkout@v4
+          with:
+            ref: main
+            fetch-depth: 0  # Needed to push and create new branches
+
+        - name: Set up Git config
+          run: |
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+
+        - name: Create branch and run changes
+          id: create_branch
+          env:
+            ISSUE_TITLE: $(echo "${{ needs.read_ticket.outputs.issue_title_b64 }}" | base64 --decode)
+            ISSUE_NUMBER: $(echo "${{ needs.read_ticket.outputs.issue_number_b64 }}" | base64 --decode)
+          run: |
+            # Sanitize title for use in branch name
+            SAFE_TITLE=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
+            BRANCH="suggestion/$ISSUE_NUMBER-$SAFE_TITLE"
+            git checkout -b "$BRANCH"
+            git push origin "$BRANCH"
+            echo "new_branch_name=$BRANCH" >> "$GITHUB_OUTPUT"
           
 
   # --- JOB 2: Run the FLOCK Agent System ---
@@ -55,12 +85,15 @@ jobs:
       contents: write
       pull-requests: write
 
-    needs: read_ticket
+    needs: [read_ticket, create_branch]
 
     steps:
       # We check out the code in this job, as it's where the code is actually needed.
       - name: Check out repository code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.create_branch.outputs.new_branch_name }}
+          fetch-depth: 0  # Needed to push and create new branches
 
       - name: Set up Python Environment
         uses: actions/setup-python@v4
@@ -94,3 +127,42 @@ jobs:
           git add .
           git commit -m "Resolve ticket #${{ needs.read_ticket.outputs.issue_number_b64 }} with FLOCK AI"
           git push 
+
+  pull_request:
+    name: Create Pull Request
+    runs-on: ubuntu-latest
+    needs: [read_ticket, create_branch]
+    permissions:
+      contents: read
+      pull-requests: write
+    if: ${{ success() }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.create_branch.outputs.new_branch_name }}
+          clean: 'true'
+          fetch-depth: 0
+
+      - name: Decode Issue Data
+        id: decode_issue_data
+        env:
+          ISSUE_TITLE_B64: ${{ needs.read_ticket.outputs.issue_title_b64 }}
+          ISSUE_BODY_B64: ${{ needs.read_ticket.outputs.issue_body_b64 }}
+          ISSUE_NUMBER_B64: ${{ needs.read_ticket.outputs.issue_number_b64 }}
+        run: |
+          ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode | tr -d '\n')
+          ISSUE_BODY=$(echo "$ISSUE_BODY_B64" | base64 --decode | tr -d '\n')
+          ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode | tr -d '\n')
+          echo "ISSUE_TITLE=$ISSUE_TITLE" >> $GITHUB_ENV
+          echo "ISSUE_BODY=$ISSUE_BODY" >> $GITHUB_ENV
+          echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          title: "${{ env.ISSUE_TITLE }} (closes #${{ env.ISSUE_NUMBER }})"
+          body: "This PR resolves the issue #${{ env.ISSUE_NUMBER }}"
+          branch: ${{ needs.create_branch.outputs.new_branch_name }}
+          commit-message: "Resolve ticket #${{ env.ISSUE_NUMBER }}"
+          author: "inirest-bot[bot]"
