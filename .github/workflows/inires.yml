@@ -118,3 +118,41 @@ jobs:
 
        # Finally, execute the main Python script.
         #run: python main_flock_script.py
+  pull_request:
+    name: Create Pull Request
+    runs-on: ubuntu-latest
+    needs: [read_ticket, create_branch]
+    permissions:
+      contents: read
+      pull-requests: write
+    if: ${{ success() }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.create_branch.outputs.new_branch_name }}
+          clean: 'true'
+          fetch-depth: 0
+
+      - name: Decode Issue Data
+        id: decode_issue_data
+        env:
+          ISSUE_TITLE_B64: ${{ needs.read_ticket.outputs.issue_title_b64 }}
+          ISSUE_BODY_B64: ${{ needs.read_ticket.outputs.issue_body_b64 }}
+          ISSUE_NUMBER_B64: ${{ needs.read_ticket.outputs.issue_number_b64 }}
+        run: |
+          ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode | tr -d '\n')
+          ISSUE_BODY=$(echo "$ISSUE_BODY_B64" | base64 --decode | tr -d '\n')
+          ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode | tr -d '\n')
+          echo "ISSUE_TITLE=$ISSUE_TITLE" >> $GITHUB_ENV
+          echo "ISSUE_BODY=$ISSUE_BODY" >> $GITHUB_ENV
+          echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          title: "${{ env.ISSUE_TITLE }} (closes #${{ env.ISSUE_NUMBER }})"
+          body: "This PR resolves the issue #${{ env.ISSUE_NUMBER }}"
+          branch: ${{ needs.create_branch.outputs.new_branch_name }}
+          commit-message: "Resolve ticket #${{ env.ISSUE_NUMBER }}"
+          author: "inirest-bot[bot]"
