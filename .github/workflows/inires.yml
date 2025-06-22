@@ -126,28 +126,6 @@ jobs:
             --ticket-title "$ISSUE_TITLE" \
             --ticket-body "$ISSUE_BODY"
 
-      - name: Commit and Push Changes
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Resolve ticket #${ISSUE_NUMBER} with FLOCK AI"
-          git push origin "${{ needs.create_branch.outputs.new_branch_name }}"
-
-      - name: Decode Issue Data
-        id: decode_issue_data
-        env:
-          ISSUE_TITLE_B64: ${{ needs.read_ticket.outputs.issue_title_b64 }}
-          ISSUE_BODY_B64: ${{ needs.read_ticket.outputs.issue_body_b64 }}
-          ISSUE_NUMBER_B64: ${{ needs.read_ticket.outputs.issue_number_b64 }}
-        run: |
-          ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode | tr -d '\n')
-          ISSUE_BODY=$(echo "$ISSUE_BODY_B64" | base64 --decode | tr -d '\n')
-          ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode | tr -d '\n')
-          echo "ISSUE_TITLE=$ISSUE_TITLE" >> $GITHUB_ENV
-          echo "ISSUE_BODY=$ISSUE_BODY" >> $GITHUB_ENV
-          echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
