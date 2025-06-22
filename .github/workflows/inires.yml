@@ -1,5 +1,5 @@
 # A human-readable name for the workflow.
-name: FLOCK AI Ticket Resolver (Two-Job)
+name: inires
 
 # ---
 # TRIGGER
@@ -103,24 +103,23 @@ jobs:
           python-version: '3.11'
 
       - name: Install Project Dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements-dev.txt
 
-#       #This is the core step where we run our agent system.
-#      - name: Run FLOCK Agent System
-#        env:
-#          #We access the outputs from the 'read_ticket' job using the 'needs' context.
-#          #We must decode the base64 strings to get back the original title and body.
-#          ISSUE_TITLE: $(echo "${{ needs.read_ticket.outputs.issue_title_b64 }}" | base64 --decode)
-#          ISSUE_BODY: $(echo "${{ needs.read_ticket.outputs.issue_body_b64 }}" | base64 --decode)
-#          ISSUE_NUMBER: $(echo "${{ needs.read_ticket.outputs.issue_number_b64 }}" | base64 --decode)
-#
-#          #Secrets are passed to this job, as it's the one that needs them.
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-#
-#        #Finally, execute the main Python script.
-#        run: |
-#          python main.py
+      - name: Run FLOCK Agent System
+        env:
+          ISSUE_NUMBER_B64: ${{ needs.read_ticket.outputs.issue_number_b64 }}
+          ISSUE_TITLE_B64: ${{ needs.read_ticket.outputs.issue_title_b64 }}
+          ISSUE_BODY_B64: ${{ needs.read_ticket.outputs.issue_body_b64 }}
+
+          #Secrets are passed to this job, as it's the one that needs them.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+        run: |
+          export ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode)
+          export ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode)
+          export ISSUE_BODY=$(echo "$ISSUE_BODY_B64" | base64 --decode)
+          python main.py --issue-number "$ISSUE_NUMBER" --issue-title "$ISSUE_TITLE" --issue-body "$ISSUE_BODY"
 
       - name: Commit and Push Changes
         run: |
