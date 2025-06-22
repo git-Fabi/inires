@@ -26,7 +26,6 @@ class RepoReaderAgent:
         description = (
             "This agent analyzes a problem description and a provided list of file paths. "
             "Its goal is to identify the most relevant files for solving the problem. "
-            "You MUST only return paths to files, not directories. "
             "The final output must be ONLY a JSON object containing a single key 'relevant_files' "
             "which holds a list of file path strings."
         )

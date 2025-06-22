@@ -4,7 +4,11 @@ from typing import Any
 
 from flock.core import Flock
 from src.models.ticket import Ticket
-from src.utils.utils_evaluation_agent import setup_evaluation_agent
+from src.utils.utils_evaluation_agent import (
+    setup_evaluation_agent,
+    run_evaluation_loop,
+    DEFAULT_EVALUATION_THRESHOLD,
+)
 from src.utils.utils_reader_agent import setup_reader_agent
 from src.utils.utils_repo_reader_agent import (
     setup_repo_reader_agent,
@@ -14,8 +18,6 @@ from src.utils.utils_solution_generator_agent import setup_solution_generator_ag
 from src.utils.utils_writer_agent import setup_writer_agent
 
 MODEL = "azure/gpt-4o-mini"
-MAX_EVALUATION_ATTEMPTS = 3
-DEFAULT_EVALUATION_THRESHOLD = 8
 
 
 def setup_agents() -> Flock:
@@ -55,73 +57,36 @@ def runner(
     ticket_description = ticket_context.get("ticket_context", ticket.title)
 
     print("\n[2/4] Running RepoReaderAgent...")
+    # Ensure we have a non-empty input string for the repo_reader_agent
     repo_reader_input_str = (
         repository_input
-        if repository_input is not None
+        if repository_input is not None and repository_input != ""
         else prepare_repo_reader_input(ticket_description)
     )
+
+    # Safeguard against empty input
+    if not repo_reader_input_str:
+        print(
+            "   -> WARNING: Empty input for RepoReaderAgent. Generating fallback input."
+        )
+        repo_reader_input_str = f"Ticket description: {ticket_description}\nPlease identify relevant files for this task."
+
+    # Use the original parameter name "repository+ticket_context" that the agent expects
     repo_reader_output = flock.run(
         "repo_reader_agent", input={"repository+ticket_context": repo_reader_input_str}
     )
+    print(f"   -> Output: {repo_reader_output}")
+
+    # Extract the relevant_classes string from the output
     repo_context_str = repo_reader_output.get("relevant_classes", "{}")
-    print(f"   -> Output: {repo_context_str}")
 
-    print("\n[3/4] Entering Generation/Evaluation Loop...")
-    best_plan = None
-    best_score = -1
-    feedback = "No feedback yet. This is the first attempt."
-
-    for attempt in range(MAX_EVALUATION_ATTEMPTS):
-        print(f"\n   --- Attempt {attempt + 1}/{MAX_EVALUATION_ATTEMPTS} ---")
-
-        print("   [+] Generating Plan...")
-        generator_input = {
-            "relevant_files_context": repo_context_str,
-            "feedback": feedback,
-        }
-        plan_generation_output = flock.run(
-            "solution_generator_agent",
-            input=generator_input,
-        )
-        current_plan_str = plan_generation_output.get("solution_plan", "{}")
-        print(f"      -> Generated Plan: {current_plan_str}")
-
-        print("   [+] Evaluating Plan...")
-        eval_input = {
-            "plan": current_plan_str,
-            "ticket_context": json.dumps(ticket_context),
-            "relevant_files_context": repo_context_str,
-        }
-        evaluation_output = flock.run(
-            "evaluation_agent", input={"input_data": eval_input}
-        )
-        evaluation_str = evaluation_output.get("evaluation", "{}")
-        print(f"      -> Evaluation: {evaluation_str}")
-
-        try:
-            evaluation = json.loads(evaluation_str)
-            score = int(evaluation.get("score", 0))
-            feedback = evaluation.get("feedback", "No feedback provided.")
-        except (ValueError, AttributeError) as e:
-            print(f"      -> ERROR: Could not parse evaluation. Retrying. Details: {e}")
-            score = 0
-            feedback = "The evaluation output was malformed. Please provide a valid JSON with 'score' and 'feedback'."
-            continue
-
-        if score > best_score:
-            best_score = score
-            best_plan = current_plan_str
-            print(f"   [+] New best plan found with score: {best_score}")
-
-        if best_score >= evaluation_threshold:
-            print(
-                f"   [+] Plan approved with score {best_score} (Threshold: {evaluation_threshold}). Exiting loop."
-            )
-            break
-        else:
-            print(
-                f"   [+] Plan score {score} is below threshold of {evaluation_threshold}. Refining with feedback: {feedback}"
-            )
+    # Run the evaluation loop to get the best plan
+    best_plan, best_score = run_evaluation_loop(
+        flock,
+        repo_context_str,
+        ticket_context,
+        evaluation_threshold,
+    )
 
     print(f"\n[4/4] Running WriterAgent with Best Plan (Score: {best_score}/10)...")
     writer_output = flock.run(
