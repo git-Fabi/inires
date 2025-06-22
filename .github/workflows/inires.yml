@@ -112,7 +112,8 @@ jobs:
           ISSUE_NUMBER_B64: ${{ needs.read_ticket.outputs.issue_number_b64 }}
           ISSUE_TITLE_B64: ${{ needs.read_ticket.outputs.issue_title_b64 }}
           ISSUE_BODY_B64: ${{ needs.read_ticket.outputs.issue_body_b64 }}
-
+          AZURE_API_KEY: ${{ secrets.AZURE_API_KEY }}
+          AZURE_API_BASE: ${{ secrets.AZURE_API_BASE }}
         run: |
           export ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode)
           export ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode)
