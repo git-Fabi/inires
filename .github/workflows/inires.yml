@@ -149,6 +149,12 @@ jobs:
           ref: ${{ needs.create_branch.outputs.new_branch_name }}
           fetch-depth: 1
 
+      - name: Fetch the updated branch
+        run: git fetch origin ${{ needs.create_branch.outputs.new_branch_name }}
+
+      - name: Checkout the updated branch
+        run: git checkout ${{ needs.create_branch.outputs.new_branch_name }}
+
       - name: Decode Issue Data
         id: decode_issue_data
         env:
