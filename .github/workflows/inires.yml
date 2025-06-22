@@ -132,7 +132,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           git commit -m "Resolve ticket #${ISSUE_NUMBER} with FLOCK AI"
-          git push origin ${{ needs.create_branch.outputs.new_branch_name }}
+          git push origin "${{ needs.create_branch.outputs.new_branch_name }}"
 
   pull_request:
     name: Create Pull Request
