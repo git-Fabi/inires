@@ -34,6 +34,7 @@ def _scan_repository_filesystem(root_dir: str = ".") -> list[str]:
         "env",
         "build",
         "dist",
+        ".flock",
     }
     logging.info(f"Scanning repository from `{os.path.abspath(root_dir)}`...")
     for root, dirs, files in os.walk(root_dir):

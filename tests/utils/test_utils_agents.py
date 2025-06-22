@@ -1,3 +1,4 @@
+import json
 from unittest.mock import MagicMock, patch, call
 
 import pytest
@@ -79,29 +80,38 @@ def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
     mock_flock = MagicMock()
     mock_flock.run = mock_flock_run
     mock_ticket.title = "Mock Ticket Title"
+
+    ticket_reader_output = {"ticket_context": "something useful"}
+    repo_reader_output = {
+        "relevant_classes": '{"relevant_files": ["file1.py", "file2.py"]}'
+    }
+    solution_generator_output = {"solution_plan": '{"plan": ["step1", "step2"]}'}
+    evaluation_output = {"evaluation": '{"score": 9, "feedback": ""}'}
+    writer_output = {"code": "Generated code based on the plan"}
+
     # Set the return values for each call
     mock_flock_run.side_effect = [
-        {
-            "context": "something useful",
-            "description": "Parsed description",
-        },  # First call (ticket reader)
-        {
-            "context": "something useful",
-            "description": "Parsed description",
-        },  # Second call (ticket reader) - duplicate call in current implementation
-        {"relevant_files": ["file1.py", "file2.py"]},  # Third call (repo reader)
-        {
-            "solution_plan": '{"plan": ["step1", "step2"]}'
-        },  # Fourth call (solution generator)
-        {"evaluation": '{"score": 9, "feedback": ""}'},  # Fifth call (evaluation agent)
-        {"code": "Generated code based on the plan"},  # Sixth call (writer)
+        ticket_reader_output,
+        repo_reader_output,
+        solution_generator_output,
+        evaluation_output,
+        writer_output,
     ]
 
-    result = runner(mock_flock, mock_ticket, repository_input="test repository input")
+    result = runner(
+        mock_flock,
+        mock_ticket,
+        repository_input="test repository input",
+        evaluation_threshold=9,
+    )
+
+    repo_context_str = repo_reader_output["relevant_classes"]
+    plan_str = solution_generator_output["solution_plan"]
+    ticket_context_json = json.dumps(ticket_reader_output)
+
     mock_flock.run.assert_has_calls(
         [
             call("ticket_reader_agent", input=mock_ticket.to_dict()),
-            call("ticket_reader_agent", input=mock_ticket.to_dict()),  # Second call
             call(
                 "repo_reader_agent",
                 input={
@@ -111,7 +121,8 @@ def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
             call(
                 "solution_generator_agent",
                 input={
-                    "relevant_files_context": "{}",
+                    "relevant_files_context": repo_context_str,
+                    "ticket_context": ticket_context_json,
                     "feedback": "No feedback yet. This is the first attempt.",
                 },
             ),
@@ -119,14 +130,14 @@ def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
                 "evaluation_agent",
                 input={
                     "input_data": {
-                        "plan": '{"plan": ["step1", "step2"]}',
-                        "ticket_context": '{"context": "something useful", "description": "Parsed description"}',
-                        "relevant_files_context": "{}",
+                        "plan": plan_str,
+                        "ticket_context": ticket_context_json,
+                        "relevant_files_context": repo_context_str,
                     }
                 },
             ),
-            call("writer_agent", input={"plan": '{"plan": ["step1", "step2"]}'}),
+            call("writer_agent", input={"plan": plan_str}),
         ]
     )
 
-    assert result == {"code": "Generated code based on the plan"}
+    assert result == writer_output

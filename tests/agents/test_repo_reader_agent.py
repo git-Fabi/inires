@@ -23,7 +23,7 @@ def test_create_repo_reader_agent(monkeypatch: pytest.MonkeyPatch) -> None:
 
     def dummy_create_default_agent(**kwargs: Any) -> DummyFlockAgent:
         assert kwargs["name"] == "test_agent"
-        assert "analyzes a problem description" in kwargs["description"]
+        assert "You are an expert programmer" in kwargs["description"]
         assert "repository+ticket_context" in kwargs["input"]
         assert "relevant_classes" in kwargs["output"]
         return dummy_instance
