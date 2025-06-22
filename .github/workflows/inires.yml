@@ -100,10 +100,17 @@ jobs:
 
       - name: Decode Issue Data
         id: decode_issue_data
+        env:
+          ISSUE_TITLE_B64: ${{ needs.read_ticket.outputs.issue_title_b64 }}
+          ISSUE_BODY_B64: ${{ needs.read_ticket.outputs.issue_body_b64 }}
+          ISSUE_NUMBER_B64: ${{ needs.read_ticket.outputs.issue_number_b64 }}
         run: |
-          echo "ISSUE_TITLE=$(echo '${{ needs.read_ticket.outputs.issue_title_b64 }}' | base64 --decode)" >> $GITHUB_ENV
-          echo "ISSUE_BODY=$(echo '${{ needs.read_ticket.outputs.issue_body_b64 }}' | base64 --decode)" >> $GITHUB_ENV
-          echo "ISSUE_NUMBER=$(echo '${{ needs.read_ticket.outputs.issue_number_b64 }}' | base64 --decode)" >> $GITHUB_ENV
+          ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode)
+          ISSUE_BODY=$(echo "$ISSUE_BODY_B64" | base64 --decode)
+          ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode)
+          echo "ISSUE_TITLE=$ISSUE_TITLE" >> $GITHUB_ENV
+          echo "ISSUE_BODY=$ISSUE_BODY" >> $GITHUB_ENV
+          echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
