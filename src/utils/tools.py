@@ -54,4 +54,4 @@ def read_code_file(file_path: str) -> str:
         with open(file_path, "r", encoding="utf-8") as f:
             return f.read()
     except Exception as e:
-        raise FileNotFoundError(f"Error writing code to file: {file_path}: {e}")
+        raise FileNotFoundError(f"Error reading code file: {file_path}: {e}")

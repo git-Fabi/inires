@@ -1,9 +1,10 @@
+from pathlib import Path
 from unittest.mock import patch, MagicMock
 from typing import Generator
 
 import pytest
 
-from src.utils.tools import read_repository_files
+from src.utils.tools import read_repository_files, write_code_to_file, read_code_file
 
 
 @pytest.fixture
@@ -83,3 +84,51 @@ def test_read_repository_files_other_error(mock_os_path_abspath: MagicMock) -> N
         assert "File: `protected.py`" in result
         assert "Error: Could not read file" in result
         assert "Permission denied" in result
+
+
+def test_write_code_to_file_success(tmp_path: Path) -> None:
+    file_path = tmp_path / "subdir" / "test_file.py"
+    code = "print('Hello, world!')"
+
+    write_code_to_file(str(file_path), code)
+
+    # Read back to confirm write
+    with open(file_path, "r", encoding="utf-8") as f:
+        assert f.read() == code
+
+
+def test_write_code_to_file_creates_directory(tmp_path: Path) -> None:
+    file_path = tmp_path / "nested" / "dir" / "file.py"
+    code = "# auto-generated"
+
+    write_code_to_file(str(file_path), code)
+
+    assert file_path.exists()
+    with open(file_path, "r", encoding="utf-8") as f:
+        assert f.read() == code
+
+
+def test_write_code_to_file_raises_file_error() -> None:
+    with patch("builtins.open", side_effect=PermissionError("No write access")):
+        with pytest.raises(FileNotFoundError) as exc_info:
+            write_code_to_file("some/file.py", "data")
+        assert "Error writing code to file" in str(exc_info.value)
+        assert "No write access" in str(exc_info.value)
+
+
+def test_read_code_file_success(tmp_path: Path) -> None:
+    file_path = tmp_path / "script.py"
+    content = "print('hello')"
+    file_path.write_text(content, encoding="utf-8")
+
+    result = read_code_file(str(file_path))
+
+    assert result == content
+
+
+def test_read_code_file_raises_file_error() -> None:
+    with patch("builtins.open", side_effect=FileNotFoundError("Missing file")):
+        with pytest.raises(FileNotFoundError) as exc_info:
+            read_code_file("nonexistent.py")
+        assert "Error reading code file" in str(exc_info.value)
+        assert "Missing file" in str(exc_info.value)
