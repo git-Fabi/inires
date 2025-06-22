@@ -1,0 +1,8 @@
+Directory Structure:
+
+- src/
+  - utils/
+    - evaluation.py  # Possible location for run_evaluation_loop
+  - tests/
+    - test_evaluation.py
+- README.md
