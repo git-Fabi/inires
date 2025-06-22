@@ -19,6 +19,7 @@ def mock_ticket() -> MagicMock:
 
 @patch("utils.utils_agents.setup_writer_agent")
 @patch("utils.utils_agents.setup_solution_generator_agent")
+@patch("utils.utils_agents.setup_evaluation_agent")
 @patch("utils.utils_agents.setup_repo_reader_agent")
 @patch("utils.utils_agents.setup_reader_agent")
 @patch("utils.utils_agents.Flock")
@@ -26,6 +27,7 @@ def test_setup_agents(
     mock_flock_class: MagicMock,
     mock_setup_reader_agent: MagicMock,
     mock_setup_repo_reader_agent: MagicMock,
+    mock_setup_evaluation_agent: MagicMock,
     mock_setup_solution_generator_agent: MagicMock,
     mock_setup_writer_agent: MagicMock,
 ) -> None:
@@ -38,6 +40,9 @@ def test_setup_agents(
 
     mock_repo_reader_agent = MagicMock()
     mock_setup_repo_reader_agent.return_value = mock_repo_reader_agent
+
+    mock_evaluation_agent = MagicMock()
+    mock_setup_evaluation_agent.return_value = mock_evaluation_agent
 
     mock_solution_generator_agent = MagicMock()
     mock_setup_solution_generator_agent.return_value = mock_solution_generator_agent
@@ -54,6 +59,7 @@ def test_setup_agents(
     )
     mock_setup_reader_agent.assert_called_once()
     mock_setup_repo_reader_agent.assert_called_once()
+    mock_setup_evaluation_agent.assert_called_once()
     mock_setup_solution_generator_agent.assert_called_once()
     mock_setup_writer_agent.assert_called_once()
     mock_flock_instance.add_agent.assert_has_calls(
@@ -61,6 +67,7 @@ def test_setup_agents(
             call(mock_reader_agent),
             call(mock_repo_reader_agent),
             call(mock_solution_generator_agent),
+            call(mock_evaluation_agent),
             call(mock_writer_agent),
         ]
     )
@@ -79,8 +86,13 @@ def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
             "description": "Parsed description",
         },  # First call (ticket reader)
         {"relevant_files": ["file1.py", "file2.py"]},  # Second call (repo reader)
-        {"plan": ["step1", "step2"]},  # Third call (solution generator)
-        {"code": "Generated code based on the plan"},  # Fourth call (writer)
+        {
+            "solution_plan": '{"plan": ["step1", "step2"]}'
+        },  # Third call (solution generator)
+        {
+            "evaluation": '{"score": 9, "feedback": ""}'
+        },  # Fourth call (evaluation agent)
+        {"code": "Generated code based on the plan"},  # Fifth call (writer)
     ]
 
     result = runner(mock_flock, mock_ticket, repository_input="test repository input")
@@ -96,12 +108,21 @@ def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
             call(
                 "solution_generator_agent",
                 input={
-                    "relevant_files_context": {
-                        "relevant_files": ["file1.py", "file2.py"]
+                    "relevant_files_context": "{}",
+                    "feedback": "No feedback yet. This is the first attempt.",
+                },
+            ),
+            call(
+                "evaluation_agent",
+                input={
+                    "input_data": {
+                        "plan": '{"plan": ["step1", "step2"]}',
+                        "ticket_context": '{"context": "something useful", "description": "Parsed description"}',
+                        "relevant_files_context": "{}",
                     }
                 },
             ),
-            call("writer_agent", input={"plan": {"plan": ["step1", "step2"]}}),
+            call("writer_agent", input={"plan": '{"plan": ["step1", "step2"]}'}),
         ]
     )
 

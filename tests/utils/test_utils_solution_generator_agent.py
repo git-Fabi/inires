@@ -1,5 +1,5 @@
-from unittest.mock import patch, MagicMock
 from typing import Tuple, Generator
+from unittest.mock import patch, MagicMock
 
 import pytest
 from flock.core import FlockAgent
