@@ -1,5 +1,3 @@
-# src/utils/utils_agents.py
-import json
 from typing import Any
 
 from flock.core import Flock
@@ -46,22 +44,18 @@ def runner(
     ticket_context_output = flock.run("ticket_reader_agent", input=ticket.to_dict())
     print(f"   -> Output: {ticket_context_output}")
 
-    ticket_context: dict[str, Any]
-    if isinstance(ticket_context_output, str):
-        ticket_context = json.loads(ticket_context_output)
-    else:
-        # The agent returns a dictionary directly, so we use it as is.
-        ticket_context = ticket_context_output
 
-    # The descriptive text is under the 'ticket_context' key, not 'description'.
-    ticket_description = ticket_context.get("ticket_context", ticket.title)
+    ticket_context_json = flock.run("ticket_reader_agent", input=ticket.to_dict())
+    print(f"   -> Output: {ticket_context_json}")
 
     print("\n[2/4] Running RepoReaderAgent...")
     # Ensure we have a non-empty input string for the repo_reader_agent
     repo_reader_input_str = (
         repository_input
+      
         if repository_input is not None and repository_input != ""
-        else prepare_repo_reader_input(ticket_description)
+        else prepare_repo_reader_input(ticket_context_json)
+
     )
 
     # Safeguard against empty input

@@ -1,4 +1,5 @@
-# src/main.py
+import argparse
+
 from typing import Optional, Any
 
 from src.models.ticket import Ticket
@@ -32,20 +33,21 @@ def main(
 
 
 if __name__ == "__main__":
-    print("--- Preparing Test Ticket ---")
-    sample_ticket = Ticket(
-        ticket_title="WebUI for Agent Communication",
-        ticket_body=(
-            "Create a WebUI for this System, that visualizes the communication between each of the agents. Use CSS and a single HTML file to write the code for this task. Make it like an interactive Chat-viewer, where we have the different users, alias agents writing in the chat what they are outputtin"
-        ),
-        ticket_number="TICK-456",
+
+    parser = argparse.ArgumentParser(description="Inires Agent Pipeline")
+    parser.add_argument(
+        "--ticket-number", type=str, required=True, help="Ticket ID to process"
     )
-
-    # For testing, we can set a high threshold to ensure the loop runs.
-    # A threshold of 10 forces the agent to generate a "perfect" plan.
-    print("\n--- RUNNING WITH HIGH THRESHOLD (10) TO TEST LOOPING ---")
-    final_solution_plan = main(sample_ticket, evaluation_threshold=10)
-
-    print("\n--- FINAL RESULT FROM PIPELINE ---")
-    print(final_solution_plan)
-    print("----------------------------------")
+    parser.add_argument(
+        "--ticket-title", type=str, required=True, help="Title of the ticket"
+    )
+    parser.add_argument(
+        "--ticket-body", type=str, required=True, help="Body of the ticket"
+    )
+    args = parser.parse_args()
+    ticket = Ticket(
+        ticket_number=args.ticket_number,
+        ticket_title=args.ticket_title,
+        ticket_body=args.ticket_body,
+    )
+    final_solution_plan = main(ticket=ticket, evaluation_threshold=10)
