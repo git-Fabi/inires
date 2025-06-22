@@ -40,8 +40,8 @@ def read_repository_files(file_paths: List[str]) -> str:
 def write_code_to_file(file_path: str, code: str) -> None:
     try:
         # Ensure the directory exists
-        if not Path(file_path).exists():
-            Path(file_path).mkdir(parents=True, exist_ok=True)
+        if not Path(file_path).parent.exists():
+            Path(file_path).parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(code)
     except Exception as e:
