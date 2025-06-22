@@ -36,13 +36,13 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Inires Agent Pipeline")
     parser.add_argument(
-        "--ticket-number", type=str, required=False, help="Ticket ID to process"
+        "--ticket-number", type=str, required=True, help="Ticket ID to process"
     )
     parser.add_argument(
-        "--ticket-title", type=str, required=False, help="Title of the ticket"
+        "--ticket-title", type=str, required=True, help="Title of the ticket"
     )
     parser.add_argument(
-        "--ticket-body", type=str, required=False, help="Body of the ticket"
+        "--ticket-body", type=str, required=True, help="Body of the ticket"
     )
     args = parser.parse_args()
     ticket = Ticket(
