@@ -44,8 +44,6 @@ def runner(
     print("--- STARTING AGENT PIPELINE ---")
 
     print("\n[1/4] Running TicketReaderAgent...")
-    ticket_context_output = flock.run("ticket_reader_agent", input=ticket.to_dict())
-    print(f"   -> Output: {ticket_context_output}")
 
     ticket_context_json = flock.run("ticket_reader_agent", input=ticket.to_dict())
     print(f"   -> Output: {ticket_context_json}")

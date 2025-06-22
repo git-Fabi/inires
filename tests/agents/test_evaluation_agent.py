@@ -31,7 +31,7 @@ def test_create_evaluation_agent(monkeypatch: pytest.MonkeyPatch) -> None:
         assert "input_data" in kwargs["input"]
         assert "evaluation" in kwargs["output"]
         assert kwargs["temperature"] == 0.5
-        assert kwargs["max_tokens"] == 4096
+        assert kwargs["max_tokens"] == 16384
         # Compare by function name instead of identity
         assert kwargs["tools"][0].__name__ == read_repository_files.__name__
         return dummy_agent
