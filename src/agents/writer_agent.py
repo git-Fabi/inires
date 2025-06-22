@@ -1,5 +1,6 @@
 from flock.core import FlockFactory, FlockAgent
 from src.utils.tools import write_code_to_file, read_code_file
+import subprocess
 
 
 class WriterAgent:
@@ -22,10 +23,7 @@ class WriterAgent:
         return FlockFactory.create_default_agent(
             name=self.name,
             description=self.description,
-            input="plan: str | The plan to implement the solution for. "
-            "This plan includes the relevant files that should "
-            "be modified or created. The plan is a JSON string that "
-            "provides a step-by-step guide.",
+            input="plan: str | The plan to implement the solution for. ",
             output="commit_message: str | A JSON object with a message that "
             "describes the changes made in the code. where they were "
             "made and why.",
@@ -33,3 +31,30 @@ class WriterAgent:
             temperature=0.7,
             max_tokens=16384,
         )
+
+    def git_revert(self, commit_hash: str) -> str:
+        """
+        Reverts a given commit by executing the git revert command.
+        """
+        try:
+            result = subprocess.run(['git', 'revert', commit_hash], check=True, text=True, capture_output=True)
+            return result.stdout
+        except subprocess.CalledProcessError as e:
+            return e.stderr
+
+    def check_set_upstream(self) -> str:
+        """
+        Checks the effectiveness of the '--set-upstream' option by attempting to push changes.
+        """
+        try:
+            result = subprocess.run(['git', 'push', '--set-upstream', 'origin', 'branch_name'], check=True, text=True, capture_output=True)
+            return result.stdout
+        except subprocess.CalledProcessError as e:
+            return e.stderr
+        
+        # Attempt to push without --set-upstream
+        try:
+            result = subprocess.run(['git', 'push', 'origin', 'branch_name'], check=True, text=True, capture_output=True)
+            return result.stdout
+        except subprocess.CalledProcessError as e:
+            return e.stderr
