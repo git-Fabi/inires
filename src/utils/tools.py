@@ -46,3 +46,12 @@ def write_code_to_file(file_path: str, code: str) -> None:
             f.write(code)
     except Exception as e:
         raise FileNotFoundError(f"Error writing code to file: {file_path}: {e}")
+
+
+@flock_tool  # type: ignore
+def read_code_file(file_path: str) -> str:
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except Exception as e:
+        raise FileNotFoundError(f"Error writing code to file: {file_path}: {e}")
