@@ -1,4 +1,3 @@
-import json
 from typing import Any
 
 from flock.core import Flock
@@ -38,18 +37,12 @@ def runner(flock: Flock, ticket: Ticket, repository_input: str = "") -> Any:
 
     ticket_context_json = flock.run("ticket_reader_agent", input=ticket.to_dict())
     print(f"   -> Output: {ticket_context_json}")
-    if isinstance(ticket_context_json, str):
-        ticket_description = json.loads(ticket_context_json).get(
-            "description", ticket.title
-        )
-    else:
-        ticket_description = ticket_context_json.get("description", ticket.title)
 
     print("\n[2/4] Running RepoReaderAgent...")
     repo_reader_input_str = (
         repository_input
         if repository_input is not None
-        else prepare_repo_reader_input(ticket_description)
+        else prepare_repo_reader_input(ticket_context_json)
     )
     repo_reader_output_json = flock.run(
         "repo_reader_agent", input={"repository+ticket_context": repo_reader_input_str}
