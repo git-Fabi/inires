@@ -129,7 +129,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_FOR_PR }}
           title: "${{ env.ISSUE_TITLE }} (closes #${{ env.ISSUE_NUMBER }})"
           body: "This PR resolves the issue #${{ env.ISSUE_NUMBER }}"
           branch: ${{ needs.create_branch.outputs.new_branch_name }}
