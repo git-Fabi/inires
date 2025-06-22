@@ -61,10 +61,9 @@ jobs:
 
         - name: Create branch and run changes
           id: create_branch
-          env:
-            ISSUE_TITLE: $(echo "${{ needs.read_ticket.outputs.issue_title_b64 }}" | base64 --decode)
-            ISSUE_NUMBER: $(echo "${{ needs.read_ticket.outputs.issue_number_b64 }}" | base64 --decode)
           run: |
+            ISSUE_TITLE=$(echo "${{ needs.read_ticket.outputs.issue_title_b64 }}" | base64 --decode)
+            ISSUE_NUMBER=$(echo "${{ needs.read_ticket.outputs.issue_number_b64 }}" | base64 --decode)
             # Sanitize title for use in branch name
             SAFE_TITLE=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
             BRANCH="suggestion/$ISSUE_NUMBER-$SAFE_TITLE"
