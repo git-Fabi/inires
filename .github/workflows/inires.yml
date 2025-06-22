@@ -167,4 +167,4 @@ jobs:
           branch: ${{ needs.create_branch.outputs.new_branch_name }}
           base: main
           commit-message: "Resolve ticket #${{ env.ISSUE_NUMBER }}"
-          author: "inirest-bot[bot]"
+          author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
