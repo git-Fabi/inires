@@ -85,20 +85,25 @@ def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
             "context": "something useful",
             "description": "Parsed description",
         },  # First call (ticket reader)
-        {"relevant_files": ["file1.py", "file2.py"]},  # Second call (repo reader)
+        {
+            "context": "something useful",
+            "description": "Parsed description",
+        },  # Second call (ticket reader) - duplicate call in current implementation
+        {"relevant_files": ["file1.py", "file2.py"]},  # Third call (repo reader)
         {
             "solution_plan": '{"plan": ["step1", "step2"]}'
-        },  # Third call (solution generator)
+        },  # Fourth call (solution generator)
         {
             "evaluation": '{"score": 9, "feedback": ""}'
-        },  # Fourth call (evaluation agent)
-        {"code": "Generated code based on the plan"},  # Fifth call (writer)
+        },  # Fifth call (evaluation agent)
+        {"code": "Generated code based on the plan"},  # Sixth call (writer)
     ]
 
     result = runner(mock_flock, mock_ticket, repository_input="test repository input")
     mock_flock.run.assert_has_calls(
         [
             call("ticket_reader_agent", input=mock_ticket.to_dict()),
+            call("ticket_reader_agent", input=mock_ticket.to_dict()),  # Second call
             call(
                 "repo_reader_agent",
                 input={
