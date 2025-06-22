@@ -107,7 +107,7 @@ jobs:
       - name: Install Project Dependencies
         run: pip install -r requirements-dev.txt
 
-      - name: Run FLOCK Agent System
+      - name: Prepare Environment Variables
         env:
           ISSUE_NUMBER_B64: ${{ needs.read_ticket.outputs.issue_number_b64 }}
           ISSUE_TITLE_B64: ${{ needs.read_ticket.outputs.issue_title_b64 }}
@@ -118,7 +118,13 @@ jobs:
           echo "ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode | tr -d '\n')" >> $GITHUB_ENV
           echo "ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode | tr -d '\n')" >> $GITHUB_ENV
           echo "ISSUE_BODY=$(echo "$ISSUE_BODY_B64" | base64 --decode | tr -d '\n')" >> $GITHUB_ENV
-          python ${{ github.workspace }}/src/main.py --ticket-number "$ISSUE_NUMBER" --ticket-title "$ISSUE_TITLE" --ticket-body "$ISSUE_BODY"
+
+      - name: Run FLOCK Agent System
+        run: |
+          python ${{ github.workspace }}/src/main.py \
+            --ticket-number "$ISSUE_NUMBER" \
+            --ticket-title "$ISSUE_TITLE" \
+            --ticket-body "$ISSUE_BODY"
 
       - name: Commit and Push Changes
         run: |
