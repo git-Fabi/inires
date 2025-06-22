@@ -44,7 +44,6 @@ def runner(
     ticket_context_output = flock.run("ticket_reader_agent", input=ticket.to_dict())
     print(f"   -> Output: {ticket_context_output}")
 
-
     ticket_context_json = flock.run("ticket_reader_agent", input=ticket.to_dict())
     print(f"   -> Output: {ticket_context_json}")
 
@@ -52,10 +51,8 @@ def runner(
     # Ensure we have a non-empty input string for the repo_reader_agent
     repo_reader_input_str = (
         repository_input
-      
         if repository_input is not None and repository_input != ""
         else prepare_repo_reader_input(ticket_context_json)
-
     )
 
     # Safeguard against empty input
@@ -63,7 +60,7 @@ def runner(
         print(
             "   -> WARNING: Empty input for RepoReaderAgent. Generating fallback input."
         )
-        repo_reader_input_str = f"Ticket description: {ticket_description}\nPlease identify relevant files for this task."
+        repo_reader_input_str = f"Ticket description: {ticket_context_json}\nPlease identify relevant files for this task."
 
     # Use the original parameter name "repository+ticket_context" that the agent expects
     repo_reader_output = flock.run(
@@ -78,7 +75,7 @@ def runner(
     best_plan, best_score = run_evaluation_loop(
         flock,
         repo_context_str,
-        ticket_context,
+        ticket_context_json,
         evaluation_threshold,
     )
 
