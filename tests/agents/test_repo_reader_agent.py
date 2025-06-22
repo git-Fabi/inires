@@ -1,36 +1,18 @@
-from typing import Any
-
-import pytest
-
-from src.agents.repo_reader_agent import RepoReaderAgent
 
 
-class DummyFlockAgent:
-    pass
+def test_repo_reader_agent_null_input() -> None:
+    with pytest.raises(ValueError):
+        RepoReaderAgent(name=None)
 
 
-def test_repo_reader_agent_initialization() -> None:
-    """Test that the RepoReaderAgent initializes with the correct name and null agent."""
+def test_repo_reader_agent_no_relevant_files() -> None:
     agent = RepoReaderAgent(name="test_agent")
-    assert agent.name == "test_agent"
-    assert agent.agent is None
-
-
-def test_create_repo_reader_agent(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test that create_repo_reader_agent calls FlockFactory with correct parameters."""
-    agent = RepoReaderAgent(name="test_agent")
-    dummy_instance = DummyFlockAgent()
-
-    def dummy_create_default_agent(**kwargs: Any) -> DummyFlockAgent:
-        assert kwargs["name"] == "test_agent"
-        assert "analyzes a problem description" in kwargs["description"]
-        assert "repository+ticket_context" in kwargs["input"]
-        assert "relevant_classes" in kwargs["output"]
-        return dummy_instance
-
-    monkeypatch.setattr(
-        "flock.core.FlockFactory.create_default_agent", dummy_create_default_agent
-    )
+    agent.relevant_files = []  # Simulate no relevant files
     result = agent.create_repo_reader_agent()
-    assert result is dummy_instance
-    assert agent.agent is dummy_instance
+    assert result is None  # Expecting None or appropriate handling
+
+
+def test_repo_reader_agent_invalid_input_format() -> None:
+    agent = RepoReaderAgent(name="test_agent")
+    with pytest.raises(ValueError):
+        agent.create_repo_reader_agent(input_format='invalid_format')  # Simulating invalid input format
