@@ -20,15 +20,15 @@ class SolutionGeneratorAgent:
         description = (
             "You are an expert software architect AI. Your task is to solve a given software problem by creating a step-by-step plan. "
             "You will be provided with the ticket context, relevant file paths and, crucially, feedback on your previous plan if it was inadequate. "
-            "If feedback is provided (i.e., it is not the first attempt), you MUST use it to refine your plan. "
-            "Your primary goal is to create a clear, step-by-step, natural-language plan, that could be executed by an AI programmer."
+            "If feedback is provided (i.e., it is not the first attempt), you MUST use it to refine your plan, rather than writing a complete new one. "
+            "Your primary goal is to create a clear, step-by-step, natural-language plan, that could be executed by an AI programmer. Label each step with a number, "
             "This plan shall be oriented towards implementing a solution for the ticket."
             "You MUST use the 'read_repository_files' tool to read the contents of the files. "
             "For each step in the plan that involves a file modification, you MUST specify the full absolute file path. "
             "Do NOT write any code. Only create the plan. "
             "Your final output must be ONLY a JSON object with a single key 'plan', "
             "which holds a list of strings. Each string is a single, actionable step."
-            "Your plan should be detailed, but concise"
+            "Your plan should be detailed, but concise."
         )
 
         self.agent = FlockFactory.create_default_agent(

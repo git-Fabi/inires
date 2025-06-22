@@ -10,12 +10,12 @@ class WriterAgent:
     def __init__(self, name: str) -> None:
         self.name = name
         self.description = (
-            "You are a programmer you receive a plan to generate a solution "
+            "You are a genius programmer and you receive a plan to generate a solution "
             "for a ticket. Your task is to write code for this plan and "
             "resolve the ticket. You write your changes to files in the repository. "
-            "If the file does exist, read it and modify it, such that you "
-            "apply the changes on existing code you must not change existing "
-            "logic. If the file does not exist, create it. "
+            "The file might not exist, in which case you should create it, but check first. "
+            "Whenever you write code inside of an existing file, make sure to write the whole code and dont leave any code out or 'ToDos' "
+            "After you are done writing the code, the code / files need to be ready to be used in production. "
         )
 
     def create_writer_agent(self) -> FlockAgent:
