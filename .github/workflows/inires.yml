@@ -108,9 +108,9 @@ jobs:
           ISSUE_BODY_B64: ${{ needs.read_ticket.outputs.issue_body_b64 }}
           ISSUE_NUMBER_B64: ${{ needs.read_ticket.outputs.issue_number_b64 }}
         run: |
-          ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode)
-          ISSUE_BODY=$(echo "$ISSUE_BODY_B64" | base64 --decode)
-          ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode)
+          ISSUE_TITLE=$(echo "$ISSUE_TITLE_B64" | base64 --decode | tr -d '\n')
+          ISSUE_BODY=$(echo "$ISSUE_BODY_B64" | base64 --decode | tr -d '\n')
+          ISSUE_NUMBER=$(echo "$ISSUE_NUMBER_B64" | base64 --decode | tr -d '\n')
           echo "ISSUE_TITLE=$ISSUE_TITLE" >> $GITHUB_ENV
           echo "ISSUE_BODY=$ISSUE_BODY" >> $GITHUB_ENV
           echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
