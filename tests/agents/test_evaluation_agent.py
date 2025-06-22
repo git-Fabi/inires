@@ -2,8 +2,8 @@ from typing import Any
 
 import pytest
 
-from src.agents.evaluation_agent import EvaluationAgent
-from src.utils.tools import read_repository_files
+from agents.evaluation_agent import EvaluationAgent
+from utils.tools import read_repository_files
 
 
 class DummyFlockAgent:
