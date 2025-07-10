@@ -25,10 +25,18 @@ class EvaluationAgent:
             "You MUST use the 'read_repository_files' tool to read the file contents before evaluating the plan. "
             "Since you know best, make suggestions to improve the plan if you think it is not good enough. But also make sure to be accepting of plans that are good enough. "
             "Your goal is to score the plan on a scale of 1.0 to 10.0, allowing for fractional scores to better distinguish between plans. "
+            "CRITICAL: You MUST explain exactly why you lowered the score and by how much for each issue found. "
+            "Start with a perfect 10.0/10.0 score and explicitly deduct points for each flaw. "
+            "Use this exact format for scoring breakdown: "
+            "'-1.0 because the plan is missing step X that is critical for Y' "
+            "'-0.5 because step Z lacks sufficient detail about how to implement feature W' "
+            "'-2.0 because the plan incorrectly assumes X when the code actually does Y' "
+            "Your feedback MUST include this detailed breakdown showing each deduction and the final calculated score. "
+            "Example: 'Starting at 10.0: -1.5 for missing integration step -> -0.5 for unclear file paths -> Final score: 8.0. Please refine integration step and clearify file paths' "
             "Provide concise, specific, and actionable feedback for improvement, especially if the score is low. "
             "Be precise in your scoring, ensuring that it reflects the plan's quality and completeness, whilst using the full scale from 1.0 to 10.0. "
-            "Your final output must be ONLY a JSON object with two keys: 'score' (a float from 1.0 to 10.0). Avoid giving the same score for different plans, "
-            "and 'feedback', which could also be positive or negative, but must be a string providing feedback on the plan. "
+            "Your final output must be ONLY a JSON object with two keys: 'score' (a float from 1.0 to 10.0) "
+            "and 'feedback', which must include the detailed score breakdown and specific suggestions for improvement."
         )
 
         self.agent = FlockFactory.create_default_agent(
