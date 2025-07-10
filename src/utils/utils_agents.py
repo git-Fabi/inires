@@ -43,12 +43,12 @@ def runner(
 ) -> Any:
     print("--- STARTING AGENT PIPELINE ---")
 
-    print("\n[1/4] Running TicketReaderAgent...")
+    print("\n[1/4] Running Ticket Agent...")
 
     ticket_context_json = flock.run("ticket_reader_agent", input=ticket.to_dict())
     print(f"   -> Output: {ticket_context_json}")
 
-    print("\n[2/4] Running RepoReaderAgent...")
+    print("\n[2/4] Running Repo Agent...")
     # Ensure we have a non-empty input string for the repo_reader_agent
     repo_reader_input_str = (
         repository_input
@@ -80,9 +80,12 @@ def runner(
         evaluation_threshold,
     )
 
-    print(f"\n[4/4] Running WriterAgent with Best Plan (Score: {best_score}/10)...")
+    print(
+        f"\n[4/4] Running Programmer Agent with Best Plan (Score:"
+        f" {best_score}/10)..."
+    )
     writer_output = flock.run(
-        "writer_agent",
+        "programmer_agent",
         input={"plan": best_plan},
     )
     print(f"   -> Output: {writer_output}")
