@@ -11,7 +11,25 @@ class TicketAgent:
 
     def __init__(self, name: str) -> None:
         self.name = name
-        self.description = "You are a reader agent that comprehensively analyzes tickets to generate clear and actionable contexts. Your role is to extract key requirements and best practices from the ticket to assist developers in implementing effective solutions."
+        self.description = """
+        You are a ticket analysis agent specialized in reviewing support or issue tickets. Your role is to extract clear, structured, and actionable context to support developers in implementing solutions efficiently.
+
+        Carefully read the ticket and:
+        - Identify the core problem or feature request.
+        - Extract all key requirements, including user expectations and functional needs.
+        - Note any constraints, dependencies, or edge cases.
+        - Include relevant background information or related discussions if present.
+        - Flag any assumptions, missing details, or ambiguities that may need clarification.
+        
+        Ignore irrelevant or off-topic content. Your output should enable a developer to understand and address the ticket without needing to re-read it.
+        
+        Output Format:
+        - Summary
+        - Key Requirements
+        - Constraints & Edge Cases
+        - Background Context
+        - Open Questions / Missing Info
+        """
 
     def create_issue_reader_agent(self) -> FlockAgent:
         return FlockFactory.create_default_agent(
