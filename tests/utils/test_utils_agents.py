@@ -136,7 +136,7 @@ def test_runner(mock_flock_run: MagicMock, mock_ticket: MagicMock) -> None:
                     }
                 },
             ),
-            call("writer_agent", input={"plan": plan_str}),
+            call("programmer_agent", input={"plan": plan_str}),
         ]
     )
 
