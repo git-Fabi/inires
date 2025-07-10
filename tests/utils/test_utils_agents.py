@@ -18,11 +18,11 @@ def mock_ticket() -> MagicMock:
     return ticket
 
 
-@patch("utils.utils_agents.setup_writer_agent")
+@patch("utils.utils_agents.setup_programmer_agent")
 @patch("utils.utils_agents.setup_solution_generator_agent")
 @patch("utils.utils_agents.setup_evaluation_agent")
 @patch("utils.utils_agents.setup_repo_reader_agent")
-@patch("utils.utils_agents.setup_reader_agent")
+@patch("utils.utils_agents.setup_ticket_agent")
 @patch("utils.utils_agents.Flock")
 def test_setup_agents(
     mock_flock_class: MagicMock,
