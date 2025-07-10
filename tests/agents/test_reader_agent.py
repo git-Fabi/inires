@@ -40,7 +40,7 @@ def test_create_issue_reader_agent(
     mock_factory, mock_agent = mock_flock_factory
 
     agent = TicketAgent("Reader2")
-    returned_agent = agent.create_issue_reader_agent()
+    returned_agent = agent.create_ticket_agent()
 
     # Ensure factory is called with correct parameters
     mock_factory.assert_called_once_with(

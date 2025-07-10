@@ -924,10 +924,13 @@ name = "inires"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "black" },
     { name = "flock" },
     { name = "flock-core" },
+    { name = "mypy" },
     { name = "pre-commit" },
     { name = "pytest" },
+    { name = "ruff" },
 ]
 
 [package.optional-dependencies]
@@ -944,15 +947,18 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "bandit", marker = "extra == 'dev'", specifier = ">=1.8.5" },
+    { name = "black", specifier = ">=25.1.0" },
     { name = "black", marker = "extra == 'dev'", specifier = ">=25.1.0" },
     { name = "flock", specifier = ">=0.1" },
     { name = "flock-core", specifier = ">=0.4.524" },
+    { name = "mypy", specifier = ">=1.16.1" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.16.1" },
     { name = "pre-commit", specifier = ">=4.2.0" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.2.0" },
     { name = "pytest", specifier = ">=8.4.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.4.1" },
     { name = "radon", marker = "extra == 'dev'", specifier = ">=6.0.1" },
+    { name = "ruff", specifier = ">=0.12.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.12.0" },
 ]
 provides-extras = ["dev"]
