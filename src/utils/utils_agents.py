@@ -7,13 +7,13 @@ from src.utils.utils_evaluation_agent import (
     run_evaluation_loop,
     DEFAULT_EVALUATION_THRESHOLD,  # Re-export this constant
 )
-from src.utils.utils_reader_agent import setup_reader_agent
+from src.utils.utils_reader_agent import setup_ticket_agent
 from src.utils.utils_repo_reader_agent import (
     setup_repo_reader_agent,
     prepare_repo_reader_input,
 )
 from src.utils.utils_solution_generator_agent import setup_solution_generator_agent
-from src.utils.utils_writer_agent import setup_writer_agent
+from utils.utils_writer_agent import setup_programmer_agent
 
 MODEL = "azure/gpt-4o-mini"
 
@@ -26,11 +26,11 @@ def setup_agents() -> Flock:
     flock: Flock = Flock(model=MODEL, name="inires_flock")
 
     # Add all agents
-    flock.add_agent(setup_reader_agent())
+    flock.add_agent(setup_ticket_agent())
     flock.add_agent(setup_repo_reader_agent())
     flock.add_agent(setup_solution_generator_agent())
     flock.add_agent(setup_evaluation_agent())
-    flock.add_agent(setup_writer_agent())
+    flock.add_agent(setup_programmer_agent())
 
     return flock
 

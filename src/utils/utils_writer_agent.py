@@ -1,9 +1,9 @@
 from flock.core import FlockAgent
-from agents.writer_agent import WriterAgent
+from agents.writer_agent import ProgrammerAgent
 
 
-def setup_writer_agent() -> FlockAgent:
-    writer_agent = WriterAgent(
-        name="writer_agent",
+def setup_programmer_agent() -> FlockAgent:
+    programmer_agent = ProgrammerAgent(
+        name="programmer_agent",
     )
-    return writer_agent.create_writer_agent()
+    return programmer_agent.create_programmer_agent()

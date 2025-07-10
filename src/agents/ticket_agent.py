@@ -31,7 +31,7 @@ class TicketAgent:
         - Open Questions / Missing Info
         """
 
-    def create_issue_reader_agent(self) -> FlockAgent:
+    def create_ticket_agent(self) -> FlockAgent:
         return FlockFactory.create_default_agent(
             name=self.name,
             description=self.description,
