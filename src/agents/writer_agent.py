@@ -9,9 +9,7 @@ class WriterAgent:
 
     def __init__(self, name: str) -> None:
         self.name = name
-        self.description = (
-            "You are a genius programmer that writes code based on detailed plans. Your role is to implement solutions and ensure that all necessary files are properly created or modified, without leaving any code incomplete or marked with 'ToDos'. Your goal is to produce production-ready code."
-        )
+        self.description = "You are a genius programmer that writes code based on detailed plans. Your role is to implement solutions and ensure that all necessary files are properly created or modified, without leaving any code incomplete or marked with 'ToDos'. Your goal is to produce production-ready code."
 
     def create_writer_agent(self) -> FlockAgent:
         return FlockFactory.create_default_agent(
