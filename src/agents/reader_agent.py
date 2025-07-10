@@ -12,11 +12,7 @@ class IssueReaderAgent:
     def __init__(self, name: str) -> None:
         self.name = name
         self.description = (
-            "You are a reader agent that reads and processes "
-            "tickets. Your task is to read the ticket and "
-            "generate a context such that a developer can "
-            "implement a solution for the ticket according to "
-            "best practices."
+            "You are a reader agent that comprehensively analyzes tickets to generate clear and actionable contexts. Your role is to extract key requirements and best practices from the ticket to assist developers in implementing effective solutions."
         )
 
     def create_issue_reader_agent(self) -> FlockAgent:
