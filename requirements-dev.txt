@@ -30,7 +30,7 @@ distro==1.9.0
 dspy==2.6.23
 executing==2.2.0
 fastapi==0.115.13
-filelock==3.18.0
+filelock==3.20.1
 flock==0.1
 flock-core==0.4.524
 frozenlist==1.7.0
