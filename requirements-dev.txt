@@ -141,7 +141,7 @@ ujson==5.10.0
 urllib3==2.5.0
 uuid6==2025.0.0
 uvicorn==0.34.3
-virtualenv==20.31.2
+virtualenv==20.36.1
 wcwidth==0.2.13
 wd-di==0.2.14
 websockets==15.0.1
